@@ -251,19 +251,19 @@ QStatusBar QLabel {
 
 /* Scroll vertical */
 QScrollBar:vertical {
-    background: #1e1e1e;
+    background: black;
     width: 10px;
 }
 
 /* Barra móvel */
 QScrollBar::handle:vertical {
-    background: #3c3c3c;
+    background: #007acc;
     min-height: 20px;
 }
 
 /* Hover */
 QScrollBar::handle:vertical:hover {
-    background: #505050;
+    background: #4752ff;
 }
 
 /* Remove botões padrão */
