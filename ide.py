@@ -11,12 +11,16 @@ from PyQt6.QtGui import QAction, QIcon, QFont
 from PyQt6.QtCore import Qt, QUrl, QSize, pyqtSignal, QObject
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
-from wandilib import WandiLibManager
-from wandimenu import WandiMenu
-# Importando o setup que criamos
-from engine import initialize_wandi_engine 
+         # CORES #
+# Gerenciador de biblioteca.
+from CORE.BIBLIOTECA.wandilib import WandiLibManager
+# MENU de ediçao do editor.
+from CORE.MENU.wandimenu import WandiMenu
+# Setup de init do arduino-cli.
+from CORE.MOTOR.engine import initialize_wandi_engine 
 
 # Classe para desviar o print para o seu Output
+# Print do Compilar e Upload também.
 class ConsoleStream(QObject):
     text_written = pyqtSignal(str)
     def write(self, text):
@@ -29,8 +33,8 @@ class WandiIDE(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        caminho_icone = os.path.join(os.path.dirname(__file__), "wandi.png")
-        self.setWindowIcon(QIcon(caminho_icone))
+        caminho_icone = os.path.join(os.path.dirname(__file__), "icons")
+        self.setWindowIcon(QIcon(os.path.join(caminho_icone, "wandi.png")))
 
         self.setWindowTitle("Wandi IDE")
         self.resize(1200, 800)
@@ -40,7 +44,7 @@ class WandiIDE(QMainWindow):
         self._create_toolbar()
         self._create_central()
         self._create_console_dock()
-        self._create_unified_dock()
+        self._create_project_dock()
         
         self._create_statusbar()
         self._adjust_initial_layout()
@@ -115,8 +119,8 @@ class WandiIDE(QMainWindow):
         self.btn_lib.clicked.connect(lambda: self._switch_view(1, "Biblioteca"))
         toolbar.addWidget(self.btn_lib)
         toolbar.addSeparator()
-        board = QComboBox(); board.addItems(["Arduino Uno", "Arduino Mega", "ESP32"]); toolbar.addWidget(board)
-        port = QComboBox(); port.addItems(["COM5", "COM6", "/dev/ttyUSB0"]); toolbar.addWidget(port)
+        port = QComboBox(); port.addItems(["COM5", "COM6"]); toolbar.addWidget(port)
+        board = QComboBox(); board.addItems(["Arduino Uno", "Arduino Mega"]); toolbar.addWidget(board)
 
     def _create_central(self):
         self.editor_tabs = QTabWidget()
@@ -137,7 +141,7 @@ class WandiIDE(QMainWindow):
         self.console_dock.setWidget(tabs)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.console_dock)
 
-    def _create_unified_dock(self):
+    def _create_project_dock(self):
         self.project_dock = QDockWidget("Simulação 3D", self)
         self.project_stack = QStackedWidget()
         self.simulation_view = QWebEngineView()
