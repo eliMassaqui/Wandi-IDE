@@ -29,6 +29,9 @@ from compilador import compiladorWandi
 # EDITOR - HIGHLIGHTER
 from highlighter import WandiHighlighter
 
+# LINHAS DO EDITOR E MAIS
+from widgets import WandiCodeEditor
+
 # Classe para desviar o print para o seu Output
 # Print do Compilar e Upload também.
 class ConsoleStream(QObject):
@@ -180,15 +183,17 @@ class WandiIDE(QMainWindow):
         port = QComboBox(); port.addItems(["COM5", "COM6"]); toolbar.addWidget(port)
 
     def _create_central(self):
-            self.editor_tabs = QTabWidget()
-            editor = QPlainTextEdit()
-            
-            # --- ATIVAÇÃO DO HIGHLIGHTER AQUI ---
-            self.highlighter = WandiHighlighter(editor.document())
-            
-            editor.setPlainText("def setup():\n    pinMode(13, OUTPUT)\n\ndef loop():\n    digitalWrite(13, HIGH)\n    delay(1000)")
-            self.editor_tabs.addTab(editor, "Código Wandi")
-            self.setCentralWidget(self.editor_tabs)
+        self.editor_tabs = QTabWidget()
+
+        # Instancia a classe que está no widgets.py
+        editor = WandiCodeEditor() 
+        editor.setFont(QFont("Consolas", 12))
+
+        self.highlighter = WandiHighlighter(editor.document())
+        editor.setPlainText("def setup():\n    pinMode(13, OUTPUT)\n\ndef loop():\n    digitalWrite(13, HIGH)\n    delay(1000)")
+
+        self.editor_tabs.addTab(editor, "Código Wandi")
+        self.setCentralWidget(self.editor_tabs)
 
     def _create_console_dock(self):
         self.console_dock = QDockWidget("Mensageiro", self)
