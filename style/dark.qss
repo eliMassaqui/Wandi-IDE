@@ -157,7 +157,9 @@ QComboBox::drop-down {
 QPlainTextEdit {
     background-color: #1e1e1e;      /* Fundo do editor */
     color: #d4d4d4;                 /* Cor do código */
-    selection-background-color: #264f78;
+    selection-background-color: #333333;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
     border: none;
 }
 
