@@ -1,6 +1,7 @@
 import sys
 import os
 import threading
+import subprocess
 
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow,
@@ -21,6 +22,9 @@ from CORE.BIBLIOTECA.wandilib import WandiLibManager
 from CORE.MENU.wandimenu import WandiMenu
 # Setup de init do arduino-cli.
 from CORE.MOTOR.engine import initialize_wandi_engine 
+
+# No topo do arquivo principal
+from compilador import compiladorWandi
 
 # Classe para desviar o print para o seu Output
 # Print do Compilar e Upload também.
@@ -52,6 +56,14 @@ class WandiIDE(QMainWindow):
         self._create_statusbar()
         self._adjust_initial_layout()
         self._apply_custom_styles()
+
+        # 1. Definir caminhos (Realista)
+        self.base_path = os.path.join(os.path.expanduser("~"), "Documents", "Wandi Studio", "Engine")
+        self.cli_exe = os.path.join(self.base_path, "arduino", "arduino-cli.exe")
+        self.wiring_folder = os.path.join(self.base_path, "WIRING")
+        
+        # 2. Inicializar tradutor
+        self.tradutor = compiladorWandi()
 
         # --- INICIALIZAÇÃO DO MOTOR WANDI ---
         self.start_engine_check()
@@ -100,14 +112,54 @@ class WandiIDE(QMainWindow):
     def _create_menu(self):
         self.menu_manager = WandiMenu(self)
 
+    def disparar_compilacao(self):
+        # Pega o código Python que está escrito no editor de texto
+        codigo_python = self.editor_tabs.currentWidget().toPlainText()
+        
+        self.log_to_output("--- [Wandi Engine] Iniciando Compilação ---")
+        
+        # PASSO 1: TRADUÇÃO
+        codigo_cpp = self.tradutor.translate(codigo_python)
+        if "ERRO" in codigo_cpp:
+            self.log_to_output(f"Erro de Tradução: {codigo_cpp}")
+            return
+
+        # PASSO 2: SALVAR O .INO
+        os.makedirs(self.wiring_folder, exist_ok=True)
+        ino_path = os.path.join(self.wiring_folder, "WIRING.ino")
+        with open(ino_path, "w", encoding="utf-8") as f:
+            f.write(codigo_cpp)
+
+        # PASSO 3: RODAR ARDUINO-CLI (Em thread para não travar a tela)
+        threading.Thread(target=self._run_cli_process, args=(self.wiring_folder,), daemon=True).start()
+
+    def _run_cli_process(self, path):
+        try:
+            # Comando para compilar para Arduino Uno
+            cmd = [self.cli_exe, "compile", "--fqbn", "arduino:avr:uno", path]
+            processo = subprocess.run(cmd, capture_output=True, text=True)
+
+            if processo.returncode == 0:
+                self.log_to_output("✔ SUCESSO: Código compilado e pronto!")
+                self.log_to_output(processo.stdout)
+            else:
+                self.log_to_output("❌ ERRO NA COMPILAÇÃO:")
+                self.log_to_output(processo.stderr)
+        except Exception as e:
+            self.log_to_output(f"Erro ao chamar compilador: {e}")
+
     def _create_toolbar(self):
         toolbar = QToolBar("Main Toolbar")
         toolbar.setMovable(False)
         toolbar.setIconSize(QSize(35, 35)) 
         self.addToolBar(toolbar)
         icons_path = os.path.join(os.path.dirname(__file__), "icons")
+        # ... código existente ...
         self.action_compilar = QAction(QIcon(os.path.join(icons_path, "compilar.png")), "Compilar", self)
+        # CONEXÃO AQUI:
+        self.action_compilar.triggered.connect(self.disparar_compilacao)
         toolbar.addAction(self.action_compilar)
+        # ... restante da toolbar ...
         self.action_enviar = QAction(QIcon(os.path.join(icons_path, "enviar.png")), "Enviar", self)
         toolbar.addAction(self.action_enviar)
         toolbar.addSeparator()
@@ -123,13 +175,12 @@ class WandiIDE(QMainWindow):
         toolbar.addWidget(self.btn_lib)
         toolbar.addSeparator()
         port = QComboBox(); port.addItems(["COM5", "COM6"]); toolbar.addWidget(port)
-        board = QComboBox(); board.addItems(["Arduino Uno", "Arduino Mega"]); toolbar.addWidget(board)
 
     def _create_central(self):
         self.editor_tabs = QTabWidget()
         editor = QPlainTextEdit()
         editor.setPlainText("def setup():\n    pass\n\ndef loop():\n    pass")
-        self.editor_tabs.addTab(editor, "wandicode.py")
+        self.editor_tabs.addTab(editor, "Código Wandi")
         self.setCentralWidget(self.editor_tabs)
 
     def _create_console_dock(self):
