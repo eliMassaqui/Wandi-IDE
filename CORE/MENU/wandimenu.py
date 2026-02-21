@@ -19,24 +19,15 @@ class WandiMenu:
 
         # --- FICHEIRO ---
         self.file_menu = menubar.addMenu("Ficheiro")
-        
         self._add_action(self.file_menu, "Novo", self._novo_arquivo).setShortcut(QKeySequence("Ctrl+N"))
         self._add_action(self.file_menu, "Abrir", self._abrir_arquivo).setShortcut(QKeySequence("Ctrl+O"))
-        
         self.file_menu.addSeparator()
-        
-        # Guardar (Ctrl+S salva direto com nome aleatório)
-        btn_guardar = self._add_action(self.file_menu, "Guardar", self._guardar_arquivo)
-        btn_guardar.setShortcut(QKeySequence("Ctrl+S"))
-        
-        # Guardar Como (Pede nome ao usuário)
-        btn_guardar_como = self._add_action(self.file_menu, "Guardar Como", self._guardar_como)
-        btn_guardar_como.setShortcut(QKeySequence("Ctrl+Shift+S"))
-        
+        self._add_action(self.file_menu, "Guardar", self._guardar_arquivo).setShortcut(QKeySequence("Ctrl+S"))
+        self._add_action(self.file_menu, "Guardar Como", self._guardar_como).setShortcut(QKeySequence("Ctrl+Shift+S"))
         self.file_menu.addSeparator()
         self._add_action(self.file_menu, "Sair", self.parent.close)
 
-        # --- EDITAR (Shortcuts corrigidos para PyQt6) ---
+        # --- EDITAR ---
         self.edit_menu = menubar.addMenu("Editar")
         self._add_action(self.edit_menu, "Desfazer", self._undo_action).setShortcut(QKeySequence(QKeySequence.StandardKey.Undo))
         self._add_action(self.edit_menu, "Refazer", self._redo_action).setShortcut(QKeySequence(QKeySequence.StandardKey.Redo))
@@ -46,26 +37,39 @@ class WandiMenu:
         self._add_action(self.edit_menu, "Cortar", self._cut_action).setShortcut(QKeySequence(QKeySequence.StandardKey.Cut))
         self._add_action(self.edit_menu, "Selecionar tudo", self._select_all_action).setShortcut(QKeySequence(QKeySequence.StandardKey.SelectAll))
 
-        # --- RESTANTE DOS MENUS ---
+        # --- WANDI (RESTAURADO COMPLETO) ---
         self.wandi_menu = menubar.addMenu("Wandi")
+        self._add_action(self.wandi_menu, "Mensageiro", lambda: self.parent.console_dock.show())
+        self._add_action(self.wandi_menu, "Wandi Vision", self._placeholder_enviar)
+        self._add_action(self.wandi_menu, "Wandi Chatbot", self._placeholder_enviar)
+        self.wandi_menu.addSeparator()
         self._add_action(self.wandi_menu, "Compilar", self.parent.disparar_compilacao).setShortcut(QKeySequence("F5"))
+        self._add_action(self.wandi_menu, "Enviar", self._placeholder_enviar)
+        self.wandi_menu.addSeparator()
+        self._add_action(self.wandi_menu, "3D", lambda: self.parent._switch_view(0, "Simulação 3D"))
+        self._add_action(self.wandi_menu, "Biblioteca", lambda: self.parent._switch_view(1, "Biblioteca"))
+
+        # --- MAIS ---
         self.mais_menu = menubar.addMenu("Mais")
+        self._add_action(self.mais_menu, "Wandi Robot", self._sobre_wandi)
+        self.mais_menu.addSeparator()
         self._add_action(self.mais_menu, "Sobre Wandi IDE", self._sobre_wandi)
+        self._add_action(self.mais_menu, "Website Causa-Efeito", self._sobre_wandi)
+        self.mais_menu.addSeparator()
+        self._add_action(self.mais_menu, "Documentacao", self._sobre_wandi)
+        self._add_action(self.mais_menu, "Manual", self._sobre_wandi)
 
     # --- LÓGICA DE ABAS E SALVAMENTO ---
 
     def _novo_arquivo(self):
-        """Cria uma nova aba com o código inicial padrão"""
+        """Cria uma nova aba com o código inicial padrão mantendo a lógica original"""
         novo_editor = QPlainTextEdit()
-        
-        # Mantém a fonte original (Consolas) para lucidez visual
         novo_editor.setFont(QFont("Consolas", 13))
         
-        # Define o código inicial (Lógica original)
+        # Código inicial conforme solicitado
         codigo_inicial = "def setup():\n    pass\n\ndef loop():\n    pass"
         novo_editor.setPlainText(codigo_inicial)
         
-        # Adiciona a aba e foca nela
         idx = self.parent.editor_tabs.addTab(novo_editor, "novo_projeto.py")
         self.parent.editor_tabs.setCurrentIndex(idx)
         self.parent.statusBar().showMessage("Novo ficheiro criado com sucesso.")
@@ -118,6 +122,10 @@ class WandiMenu:
             except Exception as e:
                 QMessageBox.critical(self.parent, "Erro", f"Erro ao abrir: {e}")
 
+    def _placeholder_enviar(self):
+        self.parent.console_dock.show()
+        self.parent.statusBar().showMessage("Enviando para a placa...")
+
     # --- EDIÇÃO ---
     def _undo_action(self): 
         if self.parent.editor_tabs.currentWidget(): self.parent.editor_tabs.currentWidget().undo()
@@ -131,4 +139,4 @@ class WandiMenu:
         if self.parent.editor_tabs.currentWidget(): self.parent.editor_tabs.currentWidget().cut()
     def _select_all_action(self): 
         if self.parent.editor_tabs.currentWidget(): self.parent.editor_tabs.currentWidget().selectAll()
-    def _sobre_wandi(self): QMessageBox.about(self.parent, "Sobre", "Wandi Studio IDE")
+    def _sobre_wandi(self): QMessageBox.about(self.parent, "Sobre", "Wandi Studio IDE - Sistema Integrado De Ensino De Robotica")
