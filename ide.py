@@ -1,12 +1,15 @@
 import sys
 import os
 import threading
+
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow,
     QMenu, QToolBar, QComboBox, QPushButton,
     QTabWidget, QPlainTextEdit, QTextEdit,
-    QDockWidget, QListWidget, QStackedWidget
+    QDockWidget, QListWidget, QStackedWidget,
+    QWidget, QVBoxLayout, QHBoxLayout, QLineEdit # <-- Adicionados
 )
+
 from PyQt6.QtGui import QAction, QIcon, QFont
 from PyQt6.QtCore import Qt, QUrl, QSize, pyqtSignal, QObject
 from PyQt6.QtWebEngineWidgets import QWebEngineView
@@ -131,15 +134,73 @@ class WandiIDE(QMainWindow):
 
     def _create_console_dock(self):
         self.console_dock = QDockWidget("Mensageiro", self)
-        tabs = QTabWidget()
-        # Referenciando o output_widget para podermos escrever nele
+        # Criamos o TabWidget
+        self.console_tabs = QTabWidget() 
+        
+        # --- ESTILO FLAT (SEM LINHAS) ---
+        style_flat = """
+            QTabWidget::pane { border: none; }
+            QPushButton#btnLimpar {
+                background-color: transparent;
+                color: #888888;
+                border: none;
+                padding: 0px 10px;
+                font-size: 11px;
+                font-weight: bold;
+            }
+            QPushButton#btnLimpar:hover { color: #ffffff; }
+            QLineEdit { background-color: #2d2d2d; color: #ffffff; border: none; padding: 4px; }
+            QTextEdit { background-color: #1e1e1e; border: none; color: #d4d4d4; }
+        """
+        self.console_tabs.setStyleSheet(style_flat)
+
+        # --- ABA OUTPUT ---
         self.output_widget = QTextEdit()
         self.output_widget.setReadOnly(True)
-        serial = QTextEdit(); serial.setReadOnly(True)
-        tabs.addTab(self.output_widget, "Output")
-        tabs.addTab(serial, "Serial")
-        self.console_dock.setWidget(tabs)
+        self.console_tabs.addTab(self.output_widget, "Output")
+
+        # --- ABA SERIAL ---
+        serial_tab = QWidget()
+        ser_layout = QVBoxLayout(serial_tab)
+        ser_layout.setContentsMargins(0, 5, 0, 0) # Ajuste para o input colado no topo
+        
+        input_container = QHBoxLayout()
+        self.serial_input = QLineEdit()
+        self.serial_input.setPlaceholderText("Enviar comando...")
+        btn_enviar = QPushButton("Enviar")
+        btn_enviar.setStyleSheet("background-color: #333; border: none; padding: 4px 10px;")
+        
+        input_container.addWidget(self.serial_input)
+        input_container.addWidget(btn_enviar)
+        
+        self.serial_widget = QTextEdit()
+        self.serial_widget.setReadOnly(True)
+        
+        ser_layout.addLayout(input_container)
+        ser_layout.addWidget(self.serial_widget)
+        self.console_tabs.addTab(serial_tab, "Serial")
+
+        # --- O PULO DO GATO: BOTÃO NO CANTO DA BARRA ---
+        btn_limpar_geral = QPushButton("LIMPAR")
+        btn_limpar_geral.setObjectName("btnLimpar")
+        btn_limpar_geral.setCursor(Qt.CursorShape.PointingHandCursor)
+        
+        # Função para limpar a aba que estiver aberta no momento
+        btn_limpar_geral.clicked.connect(self._limpar_aba_atual)
+        
+        # Coloca o botão no canto superior direito da barra de abas
+        self.console_tabs.setCornerWidget(btn_limpar_geral, Qt.Corner.TopRightCorner)
+
+        self.console_dock.setWidget(self.console_tabs)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.console_dock)
+
+    def _limpar_aba_atual(self):
+        # Verifica qual aba está selecionada e limpa o widget correspondente
+        index = self.console_tabs.currentIndex()
+        if index == 0: # Aba Output
+            self.output_widget.clear()
+        elif index == 1: # Aba Serial
+            self.serial_widget.clear()
 
     def _create_project_dock(self):
         self.project_dock = QDockWidget("Simulação 3D", self)
