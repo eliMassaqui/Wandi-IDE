@@ -8,11 +8,11 @@ from PyQt6.QtWidgets import (
     QMenu, QToolBar, QComboBox, QPushButton,
     QTabWidget, QPlainTextEdit, QTextEdit,
     QDockWidget, QListWidget, QStackedWidget,
-    QWidget, QVBoxLayout, QHBoxLayout, QLineEdit # <-- Adicionados
+    QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QFrame, QLabel # <-- Adicionados
 )
 
 from PyQt6.QtGui import QAction, QIcon, QFont
-from PyQt6.QtCore import Qt, QUrl, QSize, pyqtSignal, QObject
+from PyQt6.QtCore import Qt, QUrl, QSize, pyqtSignal, QObject, QTimer
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from EDITOR.compilador import compiladorWandi
@@ -24,6 +24,109 @@ from CORE.MOTOR.engine import initialize_wandi_engine
 from CORE.LINHAS.linhas import WandiCodeLinhas
 from CORE.SINTAXE.highlighter import WandiHighlighter
 
+class WandiNotificacao(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        # Configura a janela para ser flutuante, sem bordas e ficar sempre no topo do app
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Tool)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.frame = QFrame(self)
+        self.frame.setStyleSheet("""
+            QFrame {
+                background-color: #252526;
+                border: 1px solid #0078d4;
+                border-radius: 8px;
+            }
+            QLabel#titulo {
+                color: #ffffff;
+                font-weight: bold;
+                font-size: 13px;
+            }
+            QLabel#status {
+                color: #cccccc;
+                font-size: 11px;
+            }
+        """)
+        
+        frame_layout = QVBoxLayout(self.frame)
+        
+        self.lbl_titulo = QLabel("Wandi Engine")
+        self.lbl_titulo.setObjectName("titulo")
+        
+        self.lbl_status = QLabel("Iniciando verificação do sistema...")
+        self.lbl_status.setObjectName("status")
+        self.lbl_status.setWordWrap(True)
+        
+        frame_layout.addWidget(self.lbl_titulo)
+        frame_layout.addWidget(self.lbl_status)
+        
+        self.layout.addWidget(self.frame)
+        self.setFixedSize(350, 100)
+
+    def atualizar_status(self, texto):
+        # Remove a quebra de linha inicial em HTML que vem do seu print original
+        texto_limpo = texto.replace("<br>", "", 1).strip()
+        self.lbl_status.setText(texto_limpo)
+
+    def reposicionar(self, parent_widget):
+        # Posiciona no canto inferior direito do widget pai
+        if parent_widget:
+            x = parent_widget.width() - self.width() - 30
+            y = parent_widget.height() - self.height() - 30
+            self.move(x, y)
+
+
+from PyQt6.QtWidgets import QProgressBar # Adicione aos imports
+
+class WandiToast(QFrame):
+    def __init__(self, parent, texto):
+        super().__init__(parent)
+        self.setFixedSize(380, 70)
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose) # Se fecha, limpa da memória
+        
+        self.setStyleSheet("""
+            QFrame {
+                background-color: #1e1e1e;
+                border: 1px solid #333;
+                border-radius: 4px;
+            }
+            QLabel {
+                color: #d4d4d4;
+                font-size: 12px;
+                border: none;
+            }
+            QProgressBar {
+                border: none;
+                background-color: #2d2d2d;
+                height: 3px;
+                text-align: center;
+            }
+            QProgressBar::chunk {
+                background-color: #0078d4;
+            }
+        """)
+
+        layout = QVBoxLayout(self)
+        self.label = QLabel(texto.replace("<br>", "").strip())
+        self.label.setWordWrap(True)
+        
+        # Barra de progresso infinita (busy indicator)
+        self.progress = QProgressBar()
+        self.progress.setRange(0, 0) 
+        self.progress.setFixedHeight(3)
+
+        layout.addWidget(self.label)
+        layout.addStretch()
+        layout.addWidget(self.progress)
+        
+        self.show()
+
+    def set_texto(self, texto):
+        self.label.setText(texto.strip())
 
 # Classe para desviar o print para o seu Output
 # Print do Compilar e Upload também.
@@ -67,14 +170,61 @@ class WandiIDE(QMainWindow):
         # --- INICIALIZAÇÃO DO MOTOR WANDI ---
         self.start_engine_check()
 
+        self.toasts = [] # Lista para rastrear os cards ativos
+
     def start_engine_check(self):
-        # Redireciona o print para a aba Output
+        # Redireciona o stream
         self.stream = ConsoleStream()
         self.stream.text_written.connect(self.log_to_output)
+        self.stream.text_written.connect(self.gerenciar_notificacao) 
         sys.stdout = self.stream 
 
-        # Roda em thread para não travar a UI original
         threading.Thread(target=initialize_wandi_engine, daemon=True).start()
+
+    def gerenciar_notificacao(self, text):
+        # Filtramos apenas as mensagens principais para não poluir
+        termos_chave = ["Sincronizando", "Instalando", "Provisionando", "Verificando", "✅"]
+        
+        if any(key in text for key in termos_chave):
+            # Cria um novo toast
+            novo_toast = WandiToast(self, text)
+            self.toasts.append(novo_toast)
+            self.reposicionar_toasts()
+
+            # Se for a mensagem de sucesso, fecha todos após um tempo
+            if "✅" in text:
+                QTimer.singleShot(4000, self.limpar_todos_toasts)
+            else:
+                # Toasts normais duram 6 segundos ou até sumirem por volume
+                QTimer.singleShot(6000, lambda: self.remover_toast(novo_toast))
+
+    def reposicionar_toasts(self):
+        # Lógica de empilhamento: o mais novo fica embaixo, empurrando os velhos para cima
+        margem_direita = 20
+        margem_inferior = 40
+        espacamento = 10
+        
+        # Invertemos a lista para que o último criado fique na base
+        for i, toast in enumerate(reversed(self.toasts)):
+            x = self.width() - toast.width() - margem_direita
+            # Calcula a altura acumulada
+            y = self.height() - ( (toast.height() + espacamento) * (i + 1) ) - margem_inferior
+            toast.move(x, y)
+
+    def remover_toast(self, toast):
+        if toast in self.toasts:
+            self.toasts.remove(toast)
+            toast.close()
+            self.reposicionar_toasts()
+
+    def limpar_todos_toasts(self):
+        for toast in self.toasts[:]:
+            self.remover_toast(toast)
+
+    # Atualize também o resizeEvent para as notificações acompanharem a janela
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.reposicionar_toasts()
 
     def log_to_output(self, text):
             # Garante fonte de console para os logs técnicos
