@@ -23,7 +23,7 @@ class WandiHighlighter(QSyntaxHighlighter):
 
         # 2. Hardware e Comunicação (Ciano Vivo)
         hw_cmds = ["Serial", "pinMode", "digitalWrite", "digitalRead", "analogWrite", 
-                   "analogRead", "delay", "millis", "begin", "print", "println"]
+                   "analogRead", "delay", "millis", "begin", "print", "println", "servo", "attach", "write"]
         self._add_rule([rf'\b{cmd}\b' for cmd in hw_cmds], colors['cyan_hw'])
 
         # 3. Constantes de Estado (Amarelo)
