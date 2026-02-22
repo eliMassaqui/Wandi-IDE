@@ -291,9 +291,27 @@ class WandiIDE(QMainWindow):
         self.project_dock.setWindowTitle(title)
         self.project_dock.show()
 
+        # Personalização dinâmica de largura:
+        if index == 0:  # Simulação 3D
+            largura = 800  # Simulação costuma ser maior
+        else:           # Biblioteca
+            largura = 350  # Biblioteca pode ser mais estreita
+
+        # Aplica o redimensionamento
+        self.resizeDocks([self.project_dock], [largura], Qt.Orientation.Horizontal)
+
     def _adjust_initial_layout(self):
-        largura_projeto = int(self.width() * 0.7)
-        self.resizeDocks([self.project_dock], [largura_projeto], Qt.Orientation.Horizontal)
+        # 1. Define a altura do Mensageiro (Vertical)
+        self.resizeDocks([self.console_dock], [220], Qt.Orientation.Vertical)
+
+        # 2. Define a largura inicial do Dock da direita (Horizontal)
+        # Como ele começa oculto ou na simulação, definimos um padrão
+        self.resizeDocks([self.project_dock], [500], Qt.Orientation.Horizontal)
+
+        # --- PERSONALIZAÇÃO DA ALTURA DO MENSAGEIRO ---
+        # Define a altura desejada (ex: 200 pixels)
+        altura_mensageiro = 220
+        self.resizeDocks([self.console_dock], [altura_mensageiro], Qt.Orientation.Vertical)
 
     def _create_statusbar(self):
         self.statusBar().showMessage("Pronto")
