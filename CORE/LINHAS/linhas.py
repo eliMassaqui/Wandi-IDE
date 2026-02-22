@@ -14,7 +14,7 @@ class LineNumberArea(QWidget):
     def paintEvent(self, event):
         self.editor.lineNumberAreaPaintEvent(event)
 
-class WandiCodeEditor(QPlainTextEdit):
+class WandiCodeLinhas(QPlainTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.line_number_area = LineNumberArea(self)

@@ -29,8 +29,8 @@ from compilador import compiladorWandi
 # EDITOR - HIGHLIGHTER
 from highlighter import WandiHighlighter
 
-# LINHAS DO EDITOR E MAIS
-from widgets import WandiCodeEditor
+# LINHAS DO EDITOR
+from CORE.LINHAS.linhas import WandiCodeLinhas
 
 # Classe para desviar o print para o seu Output
 # Print do Compilar e Upload também.
@@ -186,7 +186,7 @@ class WandiIDE(QMainWindow):
             self.editor_tabs = QTabWidget()
 
              # Instancia a classe que está no widgets.py
-            editor = WandiCodeEditor() 
+            editor = WandiCodeLinhas() 
             editor.setFont(QFont("Consolas", 12))
             
             # Permite que as abas tenham o "X" para fechar
@@ -195,7 +195,7 @@ class WandiIDE(QMainWindow):
             self.editor_tabs.tabCloseRequested.connect(self._fechar_aba)
 
             # ... resto do seu código (instanciar editor, highlighter, etc) ...
-            editor = WandiCodeEditor() 
+            editor = WandiCodeLinhas() 
             self.editor_tabs.addTab(editor, "Código Wandi")
             self.setCentralWidget(self.editor_tabs)
             self.highlighter = WandiHighlighter(editor.document())

@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QMenu, QMessageBox, QFileDialog, QPlainTextEdit
 from PyQt6.QtGui import QAction, QKeySequence, QFont
 
 # No topo do arquivo wandimenu.py, importe o seu widget customizado
-from widgets import WandiCodeEditor
+from CORE.LINHAS.linhas import WandiCodeLinhas
 from highlighter import WandiHighlighter
 
 class WandiMenu:
@@ -68,7 +68,7 @@ class WandiMenu:
     def _novo_arquivo(self):
         """Cria uma nova aba usando o editor customizado da Wandi IDE"""
         # Usar o seu widget que contém a lógica de linhas
-        novo_editor = WandiCodeEditor() 
+        novo_editor = WandiCodeLinhas() 
         novo_editor.setFont(QFont("Consolas", 13))
         
         # Aplica o Highlighter na nova aba
