@@ -11,7 +11,7 @@ class WandiHighlighter(QSyntaxHighlighter):
         colors = {
             'blue_core':   "#4d94ff",  # Azul (setup, loop)
             'cyan_hw':     "#00f5ff",  # Ciano Vivo (Serial, pinMode, digitalWrite)
-            'cyan_dark':   "#00ced1",  # Ciano Escuro (Números/Pinos)
+            'green_light':   "#00f6b8",  # Verde claro (Números/Pinos)
             'yellow_sys':  "#ffcc00",  # Amarelo (HIGH, LOW, INPUT, OUTPUT)
             'orange_wandi': "#F28C28", # Laranja solicitado (#F28C28)
             'purple_logic':"#c586c0",  # Roxo (def, if, else, return)
@@ -35,7 +35,7 @@ class WandiHighlighter(QSyntaxHighlighter):
         self._add_rule([rf'\b{kw}\b' for kw in keywords], colors['purple_logic'])
 
         # 5. Números (Ciano Escuro solicitado)
-        self.rules.append((re.compile(r'\b\d+\b'), self._format(colors['cyan_dark'])))
+        self.rules.append((re.compile(r'\b\d+\b'), self._format(colors['green_light'])))
 
         # 6. Strings (Laranja #F28C28)
         self.rules.append((re.compile(r'"[^"\\]*(\\.[^"\\]*)*"'), self._format(colors['orange_wandi'])))

@@ -192,7 +192,7 @@ class WandiIDE(QMainWindow):
             self.editor_tabs.addTab(editor, "Código Wandi")
             self.setCentralWidget(self.editor_tabs)
             self.highlighter = WandiHighlighter(editor.document())
-            editor.setPlainText("def setup():\n    pinMode(13, OUTPUT)\n\ndef loop():\n    digitalWrite(13, HIGH)\n    delay(1000)")
+            editor.setPlainText("def setup():\n   pass\n\ndef loop():\n   pass")
 
     def _fechar_aba(self, index):
         # Impede fechar se for a última aba (opcional, mantém a IDE funcional)
