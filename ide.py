@@ -183,17 +183,33 @@ class WandiIDE(QMainWindow):
         port = QComboBox(); port.addItems(["COM5", "COM6"]); toolbar.addWidget(port)
 
     def _create_central(self):
-        self.editor_tabs = QTabWidget()
+            self.editor_tabs = QTabWidget()
 
-        # Instancia a classe que está no widgets.py
-        editor = WandiCodeEditor() 
-        editor.setFont(QFont("Consolas", 12))
+             # Instancia a classe que está no widgets.py
+            editor = WandiCodeEditor() 
+            editor.setFont(QFont("Consolas", 12))
+            
+            # Permite que as abas tenham o "X" para fechar
+            self.editor_tabs.setTabsClosable(True)
+            # Conecta o clique no "X" à função de remover
+            self.editor_tabs.tabCloseRequested.connect(self._fechar_aba)
 
-        self.highlighter = WandiHighlighter(editor.document())
-        editor.setPlainText("def setup():\n    pinMode(13, OUTPUT)\n\ndef loop():\n    digitalWrite(13, HIGH)\n    delay(1000)")
+            # ... resto do seu código (instanciar editor, highlighter, etc) ...
+            editor = WandiCodeEditor() 
+            self.editor_tabs.addTab(editor, "Código Wandi")
+            self.setCentralWidget(self.editor_tabs)
+            self.highlighter = WandiHighlighter(editor.document())
+            editor.setPlainText("def setup():\n    pinMode(13, OUTPUT)\n\ndef loop():\n    digitalWrite(13, HIGH)\n    delay(1000)")
 
-        self.editor_tabs.addTab(editor, "Código Wandi")
-        self.setCentralWidget(self.editor_tabs)
+    def _fechar_aba(self, index):
+        # Impede fechar se for a última aba (opcional, mantém a IDE funcional)
+        if self.editor_tabs.count() <= 1:
+            self.statusBar().showMessage("Não é possível fechar a última aba de código.")
+            return
+
+        # Remove a aba pelo índice recebido
+        self.editor_tabs.removeTab(index)
+        self.statusBar().showMessage("Aba removida.")
 
     def _create_console_dock(self):
         self.console_dock = QDockWidget("Mensageiro", self)

@@ -4,6 +4,10 @@ from pathlib import Path
 from PyQt6.QtWidgets import QMenu, QMessageBox, QFileDialog, QPlainTextEdit
 from PyQt6.QtGui import QAction, QKeySequence, QFont
 
+# No topo do arquivo wandimenu.py, importe o seu widget customizado
+from widgets import WandiCodeEditor
+from highlighter import WandiHighlighter
+
 class WandiMenu:
     def __init__(self, parent):
         self.parent = parent
@@ -62,11 +66,14 @@ class WandiMenu:
     # --- LÓGICA DE ABAS E SALVAMENTO ---
 
     def _novo_arquivo(self):
-        """Cria uma nova aba com o código inicial padrão mantendo a lógica original"""
-        novo_editor = QPlainTextEdit()
+        """Cria uma nova aba usando o editor customizado da Wandi IDE"""
+        # Usar o seu widget que contém a lógica de linhas
+        novo_editor = WandiCodeEditor() 
         novo_editor.setFont(QFont("Consolas", 13))
         
-        # Código inicial conforme solicitado
+        # Aplica o Highlighter na nova aba
+        self.parent.highlighter = WandiHighlighter(novo_editor.document())
+        
         codigo_inicial = "def setup():\n    pass\n\ndef loop():\n    pass"
         novo_editor.setPlainText(codigo_inicial)
         
@@ -75,22 +82,26 @@ class WandiMenu:
         self.parent.statusBar().showMessage("Novo ficheiro criado com sucesso.")
 
     def _guardar_arquivo(self):
-        """Salva direto com nome wandicodeXXX.py"""
-        try:
-            editor = self.parent.editor_tabs.currentWidget()
-            if not editor: return
-
+        editor = self.parent.editor_tabs.currentWidget()
+        if not editor: return
+        
+        nome_atual = self.parent.editor_tabs.tabText(self.parent.editor_tabs.currentIndex())
+        
+        # Se ainda for o nome padrão, gera o nome aleatório ou pede "Guardar Como"
+        if "novo_projeto" in nome_atual or "Código Wandi" in nome_atual:
             sufixo = random.randint(100, 999)
             nome_arquivo = f"wandicode{sufixo}.py"
             caminho_completo = os.path.join(self.default_dir, nome_arquivo)
+        else:
+            caminho_completo = os.path.join(self.default_dir, nome_atual)
 
+        try:
             with open(caminho_completo, "w", encoding="utf-8") as f:
                 f.write(editor.toPlainText())
-
-            self.parent.editor_tabs.setTabText(self.parent.editor_tabs.currentIndex(), nome_arquivo)
-            self.parent.statusBar().showMessage(f"Projeto guardado em: {nome_arquivo}")
+            self.parent.editor_tabs.setTabText(self.parent.editor_tabs.currentIndex(), os.path.basename(caminho_completo))
+            self.parent.statusBar().showMessage(f"Guardado: {caminho_completo}")
         except Exception as e:
-            self.parent.statusBar().showMessage(f"Erro ao guardar: {e}")
+            self.parent.log_to_output(f"Erro ao salvar: {e}")
 
     def _guardar_como(self):
         caminho, _ = QFileDialog.getSaveFileName(self.parent, "Guardar Como", self.default_dir, "Python Files (*.py)")
