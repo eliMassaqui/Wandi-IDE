@@ -27,7 +27,7 @@ class WandiHighlighter(QSyntaxHighlighter):
         self._add_rule([rf'\b{cmd}\b' for cmd in hw_cmds], colors['cyan_hw'])
 
         # 3. Constantes de Estado (Amarelo)
-        constants = ["HIGH", "LOW", "INPUT", "OUTPUT", "INPUT_PULLUP"]
+        constants = ["HIGH", "LOW", "INPUT", "OUTPUT", "INPUT_PULLUP", "pass"]
         self._add_rule([rf'\b{c}\b' for c in constants], colors['yellow_sys'], bold=True)
 
         # 4. Lógica de Controle (Roxo)
