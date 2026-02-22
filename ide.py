@@ -173,30 +173,34 @@ class WandiIDE(QMainWindow):
         self.toasts = [] # Lista para rastrear os cards ativos
 
     def start_engine_check(self):
-        # Redireciona o stream
         self.stream = ConsoleStream()
-        self.stream.text_written.connect(self.log_to_output)
+        
+        # Conectamos o Toast primeiro
         self.stream.text_written.connect(self.gerenciar_notificacao) 
+        # Depois o Output
+        self.stream.text_written.connect(self.log_to_output)
+        
         sys.stdout = self.stream 
-
         threading.Thread(target=initialize_wandi_engine, daemon=True).start()
 
     def gerenciar_notificacao(self, text):
-        # Filtramos apenas as mensagens principais para não poluir
-        termos_chave = ["Sincronizando", "Instalando", "Provisionando", "Verificando", "✅"]
+        termos_toast = ["Sincronizando", "Instalando", "Provisionando", "Verificando", "✅"]
         
-        if any(key in text for key in termos_chave):
-            # Cria um novo toast
-            novo_toast = WandiToast(self, text)
+        # Verifica se a mensagem contém os termos, mesmo com HTML no meio
+        if any(termo in text for termo in termos_toast):
+            # NÃO limpamos o HTML aqui, apenas removemos espaços extras
+            texto_formatado = text.strip() 
+            
+            # Criamos o Toast - o QLabel vai renderizar as cores do <font color="..."> automaticamente
+            novo_toast = WandiToast(self, texto_formatado)
             self.toasts.append(novo_toast)
             self.reposicionar_toasts()
 
-            # Se for a mensagem de sucesso, fecha todos após um tempo
             if "✅" in text:
-                QTimer.singleShot(4000, self.limpar_todos_toasts)
+                QTimer.singleShot(5000, self.limpar_todos_toasts)
             else:
-                # Toasts normais duram 6 segundos ou até sumirem por volume
                 QTimer.singleShot(6000, lambda: self.remover_toast(novo_toast))
+
 
     def reposicionar_toasts(self):
         # Lógica de empilhamento: o mais novo fica embaixo, empurrando os velhos para cima
@@ -227,18 +231,18 @@ class WandiIDE(QMainWindow):
         self.reposicionar_toasts()
 
     def log_to_output(self, text):
-            # Garante fonte de console para os logs técnicos
-            self.output_widget.setFont(QFont("Consolas", 10))
-            self.output_widget.append(text)
-            
-            # Scroll automático
-            self.output_widget.ensureCursorVisible()
+        # Termos que queremos que fiquem APENAS no Toast
+        termos_motor = ["Sincronizando", "Instalando", "Provisionando", "Verificando", "✅", "Downloading"]
+        
+        # Se algum termo do motor estiver no texto, ignoramos para o Output
+        if any(termo in text for termo in termos_motor):
+            return
 
-            # Se houver atividade técnica pesada, abre o dock "Mensageiro"
-            termos_tecnicos = ["Updating", "Downloading", "Installing", "Configuring", "Extracting"]
-            if any(termo in text for termo in termos_tecnicos):
-                if self.console_dock.isHidden():
-                    self.console_dock.show()
+        # Se passou pelo filtro, escreve no console (Mensagens de compilação, etc)
+        # Usamos insertHtml ou append para manter as cores caso a compilação também as tenha
+        self.output_widget.setFont(QFont("Consolas", 10))
+        self.output_widget.append(text) 
+        self.output_widget.ensureCursorVisible()
 
     # --- SEUS MÉTODOS ORIGINAIS (SEM ALTERAÇÃO) ---
 
