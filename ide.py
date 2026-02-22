@@ -15,22 +15,15 @@ from PyQt6.QtGui import QAction, QIcon, QFont
 from PyQt6.QtCore import Qt, QUrl, QSize, pyqtSignal, QObject
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
-         # CORES #
-# Gerenciador de biblioteca.
-from CORE.BIBLIOTECA.wandilib import WandiLibManager
-# MENU de ediçao do editor.
-from CORE.MENU.wandimenu import WandiMenu
-# Setup de init do arduino-cli.
-from CORE.MOTOR.engine import initialize_wandi_engine 
-
-# TRADUTOR WANDI
 from EDITOR.compilador import compiladorWandi
 
-# EDITOR - HIGHLIGHTER
-from highlighter import WandiHighlighter
-
-# LINHAS DO EDITOR
+         # CORES #
+from CORE.BIBLIOTECA.wandilib import WandiLibManager
+from CORE.MENU.wandimenu import WandiMenu
+from CORE.MOTOR.engine import initialize_wandi_engine
 from CORE.LINHAS.linhas import WandiCodeLinhas
+from CORE.SINTAXE.highlighter import WandiHighlighter
+
 
 # Classe para desviar o print para o seu Output
 # Print do Compilar e Upload também.
@@ -299,7 +292,7 @@ class WandiIDE(QMainWindow):
         self.project_dock.show()
 
     def _adjust_initial_layout(self):
-        largura_projeto = int(self.width() * 0.6)
+        largura_projeto = int(self.width() * 0.7)
         self.resizeDocks([self.project_dock], [largura_projeto], Qt.Orientation.Horizontal)
 
     def _create_statusbar(self):
@@ -315,7 +308,7 @@ def load_style(app):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = WandiIDE()
-    app.setFont(QFont("Consolas", 13))
+    app.setFont(QFont("Consolas", 14))
     load_style(app)
     window.showMaximized()
     sys.exit(app.exec())

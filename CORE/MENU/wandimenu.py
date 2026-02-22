@@ -6,7 +6,7 @@ from PyQt6.QtGui import QAction, QKeySequence, QFont
 
 # No topo do arquivo wandimenu.py, importe o seu widget customizado
 from CORE.LINHAS.linhas import WandiCodeLinhas
-from highlighter import WandiHighlighter
+from CORE.SINTAXE.highlighter import WandiHighlighter
 
 class WandiMenu:
     def __init__(self, parent):
@@ -44,14 +44,13 @@ class WandiMenu:
         # --- WANDI (RESTAURADO COMPLETO) ---
         self.wandi_menu = menubar.addMenu("Wandi")
         self._add_action(self.wandi_menu, "Mensageiro", lambda: self.parent.console_dock.show())
-        self._add_action(self.wandi_menu, "Wandi Vision", self._placeholder_enviar)
-        self._add_action(self.wandi_menu, "Wandi Chatbot", self._placeholder_enviar)
         self.wandi_menu.addSeparator()
         self._add_action(self.wandi_menu, "Compilar", self.parent.disparar_compilacao).setShortcut(QKeySequence("F5"))
         self._add_action(self.wandi_menu, "Enviar", self._placeholder_enviar)
         self.wandi_menu.addSeparator()
         self._add_action(self.wandi_menu, "3D", lambda: self.parent._switch_view(0, "Simulação 3D"))
         self._add_action(self.wandi_menu, "Biblioteca", lambda: self.parent._switch_view(1, "Biblioteca"))
+        self._add_action(self.wandi_menu, "Wandi Vision", self._placeholder_enviar)
 
         # --- MAIS ---
         self.mais_menu = menubar.addMenu("Mais")
@@ -77,9 +76,9 @@ class WandiMenu:
         codigo_inicial = "def setup():\n    pass\n\ndef loop():\n    pass"
         novo_editor.setPlainText(codigo_inicial)
         
-        idx = self.parent.editor_tabs.addTab(novo_editor, "novo_projeto.py")
+        idx = self.parent.editor_tabs.addTab(novo_editor, "Código Wandi.py")
         self.parent.editor_tabs.setCurrentIndex(idx)
-        self.parent.statusBar().showMessage("Novo ficheiro criado com sucesso.")
+        self.parent.statusBar().showMessage("Código Wandi criado com sucesso.")
 
     def _guardar_arquivo(self):
         editor = self.parent.editor_tabs.currentWidget()
