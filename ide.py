@@ -24,7 +24,7 @@ from CORE.MENU.wandimenu import WandiMenu
 from CORE.MOTOR.engine import initialize_wandi_engine 
 
 # TRADUTOR WANDI
-from compilador import compiladorWandi
+from EDITOR.compilador import compiladorWandi
 
 # EDITOR - HIGHLIGHTER
 from highlighter import WandiHighlighter
