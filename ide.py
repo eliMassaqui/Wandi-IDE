@@ -17,7 +17,7 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from EDITOR.compilador import compiladorWandi
 
-         # CORES #
+         # CORE #
 from CORE.BIBLIOTECA.wandilib import WandiLibManager
 from CORE.MENU.wandimenu import WandiMenu
 from CORE.MOTOR.engine import initialize_wandi_engine
