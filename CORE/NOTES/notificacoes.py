@@ -95,7 +95,7 @@ class WandiToast(QFrame):
         self.anim = QPropertyAnimation(self.opacity_effect, b"opacity")
         self.anim.setDuration(600) # 0.5 segundos de fade-in
         self.anim.setStartValue(0)
-        self.anim.setEndValue(20)
+        self.anim.setEndValue(5)
         self.anim.setEasingCurve(QEasingCurve.Type.OutCubic)
         # -------------------------------------
 
