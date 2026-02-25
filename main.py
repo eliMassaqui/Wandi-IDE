@@ -24,20 +24,31 @@ from CORE.MOTOR.engine import initialize_wandi_engine
 from CORE.LINHAS.linhas import WandiCodeLinhas
 from CORE.SINTAXE.highlighter import WandiHighlighter
 from CORE.NOTES.notificacoes import WandiNotificacao, WandiToast
+from CORE.HARDWARE.hardware import obter_portas_disponiveis, ArduinoCLI, MonitorSerial
 
 # Classe para desviar o print para o seu Output
 # Print do Compilar e Upload também.
 class ConsoleStream(QObject):
     text_written = pyqtSignal(str)
     def write(self, text):
-        if text.strip():
-            self.text_written.emit(text)
+        if text and text.strip():
+            # Às vezes o stdout recebe objetos, forçamos string
+            self.text_written.emit(str(text)) 
     def flush(self):
         pass
 
 class WandiIDE(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        # 1. Definir caminhos (Realista)
+        self.base_path = os.path.join(os.path.expanduser("~"), "Documents", "Wandi Studio", "Engine")
+        self.cli_exe = os.path.join(self.base_path, "arduino", "arduino-cli.exe")
+        self.wiring_folder = os.path.join(self.base_path, "WIRING")
+        
+        # --- NOVAS INTEGRAÇÕES ---
+        self.arduino_cli = ArduinoCLI(self.cli_exe)
+        self.thread_serial = None
 
         caminho_icone = os.path.join(os.path.dirname(__file__), "icons")
         self.setWindowIcon(QIcon(os.path.join(caminho_icone, "wandi.png")))
@@ -65,7 +76,7 @@ class WandiIDE(QMainWindow):
         self.tradutor = compiladorWandi()
 
         # --- INICIALIZAÇÃO DO MOTOR WANDI ---
-        self.start_engine_check()
+        QTimer.singleShot(100, self.start_engine_check)
 
         self.toasts = [] # Lista para rastrear os cards ativos
 
@@ -163,40 +174,92 @@ class WandiIDE(QMainWindow):
         self.menu_manager = WandiMenu(self)
 
     def disparar_compilacao(self):
-        # Pega o código Python que está escrito no editor de texto
+        # (Seu código de tradução continua igual...)
+        # ...
+        # Em vez de chamar o seu antigo _run_cli_process, use:
+        self.arduino_cli.compilar(self.wiring_folder, self.log_to_output)
+
+    # ==========================================
+    # LÓGICA DE INTEGRAÇÃO COM HARDWARE
+    # ==========================================
+
+    def atualizar_lista_portas(self):
+        """Atualiza o dropdown com as portas conectadas fisicamente."""
+        porta_atual = self.port.currentText()
+        self.port.clear()
+        
+        portas = obter_portas_disponiveis()
+        if portas:
+            self.port.addItems(portas)
+            # Tenta manter a porta que estava selecionada antes do refresh
+            if porta_atual in portas:
+                self.port.setCurrentText(porta_atual)
+        else:
+            self.port.addItem("Nenhuma porta")
+
+    def disparar_upload(self):
+        """Prepara os arquivos e aciona o upload via CLI."""
+        porta = self.port.currentText()
+        if porta == "Nenhuma porta" or not porta:
+            self.log_to_output("❌ ERRO: Nenhuma placa Arduino detectada/selecionada.")
+            return
+
         codigo_python = self.editor_tabs.currentWidget().toPlainText()
-        
-        self.log_to_output("--- [Wandi Engine] Iniciando Compilação ---")
-        
-        # PASSO 1: TRADUÇÃO
         codigo_cpp = self.tradutor.translate(codigo_python)
+        
         if "ERRO" in codigo_cpp:
             self.log_to_output(f"Erro de Tradução: {codigo_cpp}")
             return
 
-        # PASSO 2: SALVAR O .INO
         os.makedirs(self.wiring_folder, exist_ok=True)
         ino_path = os.path.join(self.wiring_folder, "WIRING.ino")
         with open(ino_path, "w", encoding="utf-8") as f:
             f.write(codigo_cpp)
 
-        # PASSO 3: RODAR ARDUINO-CLI (Em thread para não travar a tela)
-        threading.Thread(target=self._run_cli_process, args=(self.wiring_folder,), daemon=True).start()
+        # Chama a função de upload do nosso novo arquivo
+        self.arduino_cli.upload(self.wiring_folder, porta, self.log_to_output)
 
-    def _run_cli_process(self, path):
-        try:
-            # Comando para compilar para Arduino Uno
-            cmd = [self.cli_exe, "compile", "--fqbn", "arduino:avr:uno", path]
-            processo = subprocess.run(cmd, capture_output=True, text=True)
+    def alternar_conexao_serial(self):
+        """Inicia ou encerra a leitura da porta serial."""
+        if self.thread_serial and self.thread_serial.isRunning():
+            # Se está rodando, vamos parar
+            self.thread_serial.parar()
+            self.thread_serial = None
+            self.btn_conectar_serial.setText("Conectar")
+            self.btn_conectar_serial.setStyleSheet("background-color: #0078d4; border: none; padding: 4px 10px; color: white;")
+        else:
+            # Se está parado, vamos tentar conectar
+            porta = self.port.currentText()
+            if porta == "Nenhuma porta":
+                self.serial_widget.append("❌ Selecione uma porta primeiro.")
+                return
+                
+            self.thread_serial = MonitorSerial(porta)
+            
+            # Conecta os sinais da Thread para a interface
+            self.thread_serial.dados_recebidos.connect(lambda txt: self.serial_widget.append(txt))
+            self.thread_serial.erro_serial.connect(lambda txt: self.serial_widget.append(txt))
+            
+            self.thread_serial.start()
+            
+            self.btn_conectar_serial.setText("Desconectar")
+            self.btn_conectar_serial.setStyleSheet("background-color: #d40000; border: none; padding: 4px 10px; color: white;")
+            
+            # Garante que a aba Serial está visível para o usuário
+            self.console_tabs.setCurrentIndex(1) 
 
-            if processo.returncode == 0:
-                self.log_to_output("✔ SUCESSO: Código compilado e pronto!")
-                self.log_to_output(processo.stdout)
-            else:
-                self.log_to_output("❌ ERRO NA COMPILAÇÃO:")
-                self.log_to_output(processo.stderr)
-        except Exception as e:
-            self.log_to_output(f"Erro ao chamar compilador: {e}")
+    def enviar_comando_serial(self):
+        """Pega o texto do input e manda para a placa via serial."""
+        texto = self.serial_input.text()
+        if self.thread_serial and self.thread_serial.isRunning() and texto.strip():
+            self.thread_serial.enviar(texto)
+            self.serial_input.clear()
+        else:
+            self.serial_widget.append("❌ Serial desconectada. Conecte antes de enviar comandos.")
+
+
+
+
 
     def _create_toolbar(self):
         toolbar = QToolBar("Main Toolbar")
@@ -210,7 +273,9 @@ class WandiIDE(QMainWindow):
         self.action_compilar.triggered.connect(self.disparar_compilacao)
         toolbar.addAction(self.action_compilar)
         # ... restante da toolbar ...
+        # Conectar o botão Enviar (Upload)
         self.action_enviar = QAction(QIcon(os.path.join(icons_path, "enviar.png")), "Enviar", self)
+        self.action_enviar.triggered.connect(self.disparar_upload)
         toolbar.addAction(self.action_enviar)
         toolbar.addSeparator()
         self.btn_3d = QPushButton()
@@ -224,7 +289,17 @@ class WandiIDE(QMainWindow):
         self.btn_lib.clicked.connect(lambda: self._switch_view(1, "Biblioteca"))
         toolbar.addWidget(self.btn_lib)
         toolbar.addSeparator()
-        port = QComboBox(); port.addItems(["COM5", "COM6"]); toolbar.addWidget(port)
+        # Configuração Dinâmica das Portas
+        self.port = QComboBox() 
+        self.atualizar_lista_portas() # Preenche as portas na inicialização
+        toolbar.addWidget(self.port)
+
+        # Botão para atualizar a lista de portas manualmente
+        self.btn_refresh_ports = QPushButton("↻") # Use texto ou um ícone de refresh se tiver
+        self.btn_refresh_ports.setFixedSize(30, 30)
+        self.btn_refresh_ports.setToolTip("Atualizar Portas")
+        self.btn_refresh_ports.clicked.connect(self.atualizar_lista_portas)
+        toolbar.addWidget(self.btn_refresh_ports)
 
     def _create_central(self):
             self.editor_tabs = QTabWidget()
@@ -285,14 +360,25 @@ class WandiIDE(QMainWindow):
         # --- ABA SERIAL ---
         serial_tab = QWidget()
         ser_layout = QVBoxLayout(serial_tab)
-        ser_layout.setContentsMargins(0, 5, 0, 0) # Ajuste para o input colado no topo
+        ser_layout.setContentsMargins(0, 5, 0, 0)
         
         input_container = QHBoxLayout()
+        
+        # Novo Botão Conectar/Desconectar
+        self.btn_conectar_serial = QPushButton("Conectar")
+        self.btn_conectar_serial.setStyleSheet("background-color: #0078d4; border: none; padding: 4px 10px; color: white;")
+        self.btn_conectar_serial.clicked.connect(self.alternar_conexao_serial)
+        
         self.serial_input = QLineEdit()
         self.serial_input.setPlaceholderText("Enviar comando...")
+        # Permite enviar apertando "Enter"
+        self.serial_input.returnPressed.connect(self.enviar_comando_serial) 
+        
         btn_enviar = QPushButton("Enviar")
         btn_enviar.setStyleSheet("background-color: #333; border: none; padding: 4px 10px;")
+        btn_enviar.clicked.connect(self.enviar_comando_serial)
         
+        input_container.addWidget(self.btn_conectar_serial)
         input_container.addWidget(self.serial_input)
         input_container.addWidget(btn_enviar)
         
