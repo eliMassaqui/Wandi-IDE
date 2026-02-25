@@ -3,7 +3,6 @@ import subprocess
 import urllib.request
 import zipfile
 import sys
-import socket
 
 # Configurações de Caminhos
 user_docs = os.path.join(os.path.expanduser('~'), "Documents")
@@ -13,10 +12,12 @@ exe_path = os.path.join(work_dir, "arduino-cli.exe")
 config_file = os.path.join(work_dir, "arduino-cli.yaml")
 
 def tem_internet():
-    """Verifica conexão de forma rápida para decidir o modo de operação."""
+    """Verificação robusta via HTTP (Simula Navegador)."""
     try:
-        socket.setdefaulttimeout(3)
-        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
+        # User-Agent para evitar bloqueios de segurança
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        req = urllib.request.Request('https://www.google.com', headers=headers)
+        urllib.request.urlopen(req, timeout=4)
         return True
     except:
         return False
@@ -25,7 +26,7 @@ def initialize_wandi_engine():
     """
     Motor Inteligente Wandi. 
     Usa tags [SISTEMA], [PROCESSO], [INSTALAÇÃO] e 'Sincronizando' 
-    para que a IDE direcione tudo para os Toasts e ignore no Output.
+    conforme o padrão original.
     """
     
     # --- FASE 1: DIAGNÓSTICO INICIAL ---
@@ -53,8 +54,14 @@ def initialize_wandi_engine():
         
         try:
             url = "https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip"
+            # Adicionando cabeçalho também no download do binário
+            opener = urllib.request.build_opener()
+            opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
+            urllib.request.install_opener(opener)
+            
             zip_p = os.path.join(work_dir, "cli.zip")
             urllib.request.urlretrieve(url, zip_p)
+            
             print("<font color='#888888'>Sincronizando: Extraindo componentes do motor...</font>", flush=True)
             with zipfile.ZipFile(zip_p, 'r') as zip_ref:
                 zip_ref.extractall(work_dir)
@@ -68,14 +75,13 @@ def initialize_wandi_engine():
     if not os.path.exists(config_file):
         print("<font color='#888888'>Sincronizando: Gerando arquivos de configuração base...</font>", flush=True)
         subprocess.run([exe_path, "config", "init", "--overwrite", "--config-file", config_file], 
-                       capture_output=True, cwd=work_dir, shell=True)
+                        capture_output=True, cwd=work_dir, shell=True)
 
     # --- FASE 5: NÚCLEO DE HARDWARE (AVR) ---
     if online:
         print("<br><font color='#4ec9b0'><b>[PROCESSO] Sincronizando banco de dados de placas...</b></font>", flush=True)
-        # Comando de atualização silencioso para o processo
         subprocess.run([exe_path, "core", "update-index", "--config-file", config_file], 
-                       capture_output=True, cwd=work_dir, shell=True)
+                        capture_output=True, cwd=work_dir, shell=True)
         
         if not os.path.exists(avr_path):
             print("<br><font color='#ce9178'><b>[INSTALAÇÃO] Arquitetura AVR não detectada. Instalando...</b></font>", flush=True)
@@ -90,7 +96,6 @@ def initialize_wandi_engine():
         else:
             print("<font color='#888888'>Sincronizando: Verificando atualizações de hardware...</font>", flush=True)
     else:
-        # Verificação inteligente em modo offline
         if os.path.exists(avr_path):
             print("<font color='#6a9955'><b>[SISTEMA] Hardware AVR validado em cache local.</b></font>", flush=True)
         else:
@@ -102,3 +107,6 @@ def initialize_wandi_engine():
         print("<br><font color='#6a9955'><b>✅ Motor Wandi preparado e validado com sucesso!</b></font><br>", flush=True)
     else:
         print("<br><font color='#ce9178'><b>[SISTEMA] Ambiente iniciado com dependências pendentes.</b></font>", flush=True)
+
+if __name__ == "__main__":
+    initialize_wandi_engine()
