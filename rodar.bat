@@ -1,4 +1,6 @@
 @echo off
+:: Configura o console para UTF-8 (corrige acentos e símbolos)
+chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 :: Cores ANSI
@@ -11,7 +13,7 @@ set "W=[0m"  & :: Reset
 
 cls
 echo %P%===========================================================%W%
-echo %P%🚀        WANDI IDE - PREPARANDO O SEU AMBIENTE          %W%
+echo %P%🚀         WANDI IDE - PREPARANDO O SEU AMBIENTE          %W%
 echo %P%===========================================================%W%
 echo.
 
@@ -24,12 +26,12 @@ if %errorlevel% neq 0 (
     echo %B%[PROGRESSO]%W% [%G%##########%W%] 100%% - Python configurado!
     echo %G%[OK] Python integrado ao sistema.%W%
 ) else (
-    echo %G%[OK] Python ja detectado. Pulando instalacao...%W%
+    echo %G%[OK] Python já detectado. Pulando instalação...%W%
 )
 
 echo.
 :: --- ETAPA 2: GIT ---
-echo %B%[ETAPA 2/3]%W% %Y%Instalando o navegador de versoes: Git...%W%
+echo %B%[ETAPA 2/3]%W% %Y%Instalando o navegador de versões: Git...%W%
 git --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo %B%[PROGRESSO]%W% [%G%##        %W%] 20%% - Iniciando setup silencioso...
@@ -37,33 +39,33 @@ if %errorlevel% neq 0 (
     echo %B%[PROGRESSO]%W% [%G%##########%W%] 100%% - Git configurado!
     echo %G%[OK] Git pronto para uso.%W%
 ) else (
-    echo %G%[OK] Git ja esta presente no sistema.%W%
+    echo %G%[OK] Git já está presente no sistema.%W%
 )
 
 echo.
-:: --- ETAPA 3: BIBLIOTECAS (Onde o progresso é real) ---
+:: --- ETAPA 3: BIBLIOTECAS ---
 echo %B%[ETAPA 3/3]%W% %Y%Sincronizando bibliotecas da Wandi IDE...%W%
 echo %B%[INFO]%W% Isso depende da sua internet e velocidade do disco.
 
 echo %Y%-> Atualizando Pip...%W%
 python -m pip install --upgrade pip --quiet
 
-echo %Y%-> Instalando PySerial (Comunicacao USB)...%W%
+echo %Y%-> Instalando PySerial (Comunicação USB)...%W%
 python -m pip install pyserial --quiet
-echo %B%[PROGRESSO]%W% [%G%###       %W%] 30%%
+echo %B%[PROGRESSO]%W% [%G%###        %W%] 30%%
 
-echo %Y%-> Instalando PyQt6 (Interface Grafica)...%W%
+echo %Y%-> Instalando PyQt6 (Interface Gráfica)...%W%
 python -m pip install pyqt6 pyqt6-webengine --quiet
-echo %B%[PROGRESSO]%W% [%G%#######    %W%] 70%%
+echo %B%[PROGRESSO]%W% [%G%#######     %W%] 70%%
 
-echo %Y%-> Instalando PyInstaller (Gerador de Executaveis)...%W%
+echo %Y%-> Instalando PyInstaller (Gerador de Executáveis)...%W%
 python -m pip install pyinstaller --quiet
 echo %B%[PROGRESSO]%W% [%G%##########%W%] 100%%
 
 echo.
-echo %G%🎉 TUDO PRONTO! O AMBIENTE ESTA LÚCIDO E OPERACIONAL.%W%
+echo %G%🎉 TUDO PRONTO! O AMBIENTE ESTÁ LÚCIDO E OPERACIONAL.%W%
 echo %P%-----------------------------------------------------------%W%
-echo %P%           iniciando main.py...                           %W%
+echo %P%            Iniciando main.py...                           %W%
 echo %P%-----------------------------------------------------------%W%
 echo.
 

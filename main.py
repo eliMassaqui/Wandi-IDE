@@ -94,9 +94,9 @@ class WandiIDE(QMainWindow):
             self.reposicionar_toasts()
 
             if "✅" in text:
-                QTimer.singleShot(40000, self.limpar_todos_toasts)
+                QTimer.singleShot(60000, self.limpar_todos_toasts)
             else:
-                QTimer.singleShot(10000, lambda: self.remover_toast(novo_toast))
+                QTimer.singleShot(20000, lambda: self.remover_toast(novo_toast))
 
 
     def reposicionar_toasts(self):
