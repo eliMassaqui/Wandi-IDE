@@ -1,0 +1,1026 @@
+Microsoft Windows [Version 10.0.19043.928]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+D:\Wandi-IDE>python main.py
+[11376:9144:0226/220317.121:ERROR:direct_composition_support.cc(1122)] QueryInterface to IDCompositionDevice4 failed: Esta interface n├úo ├® suportada (0x80004002)
+Exception in thread Exception in thread Thread-41 (_tarefa_compilar):
+Thread-116 (_tarefa_compilar):
+Exception in thread Thread-17 (_tarefa_compilar):
+Exception in thread Thread-20 (_tarefa_compilar):
+Exception in thread Thread-35 (_tarefa_compilar):
+Exception in thread Thread-56 (_tarefa_compilar):
+Exception in thread Thread-119 (_tarefa_compilar):
+Exception in thread Thread-26 (_tarefa_compilar):
+Exception in thread Thread-29 (_tarefa_compilar):
+Exception in thread Thread-104 (_tarefa_compilar):
+Exception in thread Thread-59 (_tarefa_compilar):
+Exception in thread Thread-44 (_tarefa_compilar):
+Exception in thread Thread-86 (_tarefa_upload):
+Exception in thread Thread-32 (_tarefa_compilar):
+Exception in thread Thread-113 (_tarefa_compilar):
+Exception in thread Thread-101 (_tarefa_compilar):
+Exception in thread Thread-107 (_tarefa_compilar):
+Exception in thread Thread-53 (_tarefa_compilar):
+Exception in thread Thread-47 (_tarefa_compilar):
+Exception in thread Thread-38 (_tarefa_compilar):
+Exception in thread Thread-23 (_tarefa_compilar):
+Exception in thread Thread-98 (_tarefa_compilar):
+Exception in thread Thread-50 (_tarefa_compilar):
+Exception in thread Thread-11 (_tarefa_compilar):
+Exception in thread Thread-14 (_tarefa_compilar):
+Exception in thread Thread-89 (_tarefa_upload):
+Exception in thread Thread-83 (_tarefa_upload):
+Exception in thread Thread-110 (_tarefa_upload):
+Exception in thread Thread-62 (_tarefa_upload):
+Exception in thread Thread-65 (_tarefa_upload):
+Exception in thread Thread-95 (_tarefa_upload):
+Exception in thread Thread-68 (_tarefa_upload):
+Exception in thread Thread-71 (_tarefa_upload):
+Exception in thread Thread-92 (_tarefa_upload):
+Exception in thread Thread-80 (_tarefa_upload):
+Exception in thread Thread-77 (_tarefa_upload):
+Exception in thread Thread-74 (_tarefa_upload):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+
+During handling of the above exception, another exception occurred:
+
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 67, in _tarefa_upload
+    callback_log("❌ ERRO NO UPLOAD:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 41, in _tarefa_compilar
+    callback_log("❌ ERRO NA COMPILAÇÃO:")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+
+During handling of the above exception, another exception occurred:
+
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+During handling of the above exception, another exception occurred:
+
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+
+During handling of the above exception, another exception occurred:
+
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+
+During handling of the above exception, another exception occurred:
+
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+
+During handling of the above exception, another exception occurred:
+
+
+During handling of the above exception, another exception occurred:
+
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+During handling of the above exception, another exception occurred:
+
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+
+During handling of the above exception, another exception occurred:
+
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 1044, in _bootstrap_inner
+    self.run()
+    ~~~~~~~~^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 70, in _tarefa_upload
+    callback_log(f"Erro ao tentar fazer upload: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "C:\Program Files\Python313\Lib\threading.py", line 995, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Wandi-IDE\CORE\HARDWARE\hardware.py", line 44, in _tarefa_compilar
+    callback_log(f"Erro ao tentar compilar: {e}")
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+  File "D:\Wandi-IDE\main.py", line 151, in log_to_output
+    self.output_widget.setFont(QFont("Consolas", 10))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wrapped C/C++ object of type QTextEdit has been deleted
+Exception ignored on flushing sys.stdout:
+Traceback (most recent call last):
+  File "D:\Wandi-IDE\main.py", line 37, in flush
+    def flush(self):
+KeyboardInterrupt:
+
+D:\Wandi-IDE>
+
+
+Microsoft Windows [Version 10.0.19043.928]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+D:\Wandi-IDE>python main.py
+[6788:1500:0226/221319.269:ERROR:direct_composition_support.cc(1122)] QueryInterface to IDCompositionDevice4 failed: Esta interface n├úo ├® suportada (0x80004002)
+
+D:\Wandi-IDE>python main.py
+[5668:6476:0226/221351.671:ERROR:direct_composition_support.cc(1122)] QueryInterface to IDCompositionDevice4 failed: Esta interface n├úo ├® suportada (0x80004002)
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+
+D:\Wandi-IDE>
