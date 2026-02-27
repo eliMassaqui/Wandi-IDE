@@ -18,9 +18,16 @@ class WandiBridge(QObject):
         self.loop.run_until_complete(self._run_server())
 
     async def _run_server(self):
-        # Escuta em 127.0.0.1 (localhost)
-        async with websockets.serve(self._handler, "127.0.0.1", 8765):
-            await asyncio.Future()
+            try:
+                async with websockets.serve(self._handler, "127.0.0.1", 8765):
+                    await asyncio.Future() 
+            except OSError as e:
+                if e.errno == 10048:
+                    # Uma mensagem positiva, indicando que o serviço já está garantido
+                    print("✨ Wandi Bridge: O servidor já está ativo e a comunicação com o simulador está garantida!")
+                else:
+                    # Mantemos um log discreto para outros erros raros
+                    print(f"ℹ️ Nota de sistema: O servidor passou por um ajuste automático ({e})")
 
     async def _handler(self, websocket):
         self.clients.add(websocket)

@@ -524,7 +524,20 @@ def load_style(app):
         print(f"Erro ao carregar estilo: {e}")
 
 if __name__ == "__main__":
+    # 1. Desativa a aceleração de hardware e silencia logs do motor Chromium
+    # --disable-gpu: Mata o erro do IDCompositionDevice4 na raiz
+    # --log-level=3: Garante que apenas erros fatais apareçam no terminal
+    os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --log-level=3 --disable-software-rasterizer"
+
+    # 2. Suas configurações anteriores (ajuda na estabilidade do Qt)
+    os.environ["QT_LOGGING_RULES"] = "qt.webenginecontext.debug=false"
+    os.environ["QT_D3D_CHECK_DEVICE_COMPATIBILITY"] = "0"
+
     app = QApplication(sys.argv)
+    
+    # Opcional: Se o erro persistir, descomente a linha abaixo para forçar renderização via Software
+    # app.setAttribute(Qt.ApplicationAttribute.AA_UseSoftwareOpenGL)
+
     window = WandiIDE()
     app.setFont(QFont("Consolas", 14))
     load_style(app)
