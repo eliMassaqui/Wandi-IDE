@@ -80,25 +80,45 @@ class WandiMenu:
         self.parent.editor_tabs.setCurrentIndex(idx)
         self.parent.statusBar().showMessage("Código Wandi criado com sucesso.")
 
+    def _abrir_arquivo_por_caminho(self, caminho):
+        try:
+            with open(caminho, "r", encoding="utf-8") as f:
+                conteudo = f.read()
+                
+            editor = self.parent.editor_tabs.currentWidget()
+            if editor:
+                editor.setPlainText(conteudo)
+                self.parent.current_file_path = caminho
+                self.parent.editor_tabs.setTabText(self.parent.editor_tabs.currentIndex(), os.path.basename(caminho))
+        except Exception as e:
+            print(f"Erro: {e}")
+
     def _guardar_arquivo(self):
         editor = self.parent.editor_tabs.currentWidget()
         if not editor: return
-        
-        nome_atual = self.parent.editor_tabs.tabText(self.parent.editor_tabs.currentIndex())
-        
-        # Se ainda for o nome padrão, gera o nome aleatório ou pede "Guardar Como"
-        if "novo_projeto" in nome_atual or "Código Wandi" in nome_atual:
-            sufixo = random.randint(100, 999)
-            nome_arquivo = f"wandicode{sufixo}.py"
-            caminho_completo = os.path.join(self.default_dir, nome_arquivo)
+
+        # Se já sabemos o caminho, salvamos direto nele (Evita duplicados)
+        if self.parent.current_file_path and os.path.exists(self.parent.current_file_path):
+            caminho_completo = self.parent.current_file_path
         else:
-            caminho_completo = os.path.join(self.default_dir, nome_atual)
+            # Só cria nome aleatório se for um arquivo REALMENTE novo e nunca salvo
+            sufixo = random.randint(100, 999)
+            nome_arquivo = f"projeto_{sufixo}.py"
+            caminho_completo = os.path.join(self.default_dir, nome_arquivo)
+            self.parent.current_file_path = caminho_completo
 
         try:
             with open(caminho_completo, "w", encoding="utf-8") as f:
                 f.write(editor.toPlainText())
+            
+            # Atualiza a UI
             self.parent.editor_tabs.setTabText(self.parent.editor_tabs.currentIndex(), os.path.basename(caminho_completo))
-            self.parent.statusBar().showMessage(f"Guardado: {caminho_completo}")
+            self.parent.statusBar().showMessage(f"Guardado em: {caminho_completo}")
+            
+            # Salva para a próxima vez que abrir o app
+            with open(self.parent.session_file, "w", encoding="utf-8") as s:
+                s.write(caminho_completo)
+                
         except Exception as e:
             self.parent.log_to_output(f"Erro ao salvar: {e}")
 

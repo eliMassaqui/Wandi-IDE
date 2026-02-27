@@ -49,6 +49,13 @@ class WandiIDE(QMainWindow):
         self.base_path = os.path.join(os.path.expanduser("~"), "Documents", "Wandi Studio", "Engine")
         self.cli_exe = os.path.join(self.base_path, "arduino", "arduino-cli.exe")
         self.wiring_folder = os.path.join(self.base_path, "WIRING")
+
+        # Carregar última sessão
+        self.current_file_path = None 
+        self.session_file = os.path.join(self.base_path, "last_session.txt") # Guarda o caminho do último arquivo aberto
+
+        # Modifique o final do __init__ ou o singleShot:
+        QTimer.singleShot(100, self._carregar_ultima_sessao)
         
         self.arduino_cli = ArduinoCLI(self.cli_exe)
         self.thread_serial = None
@@ -140,6 +147,25 @@ class WandiIDE(QMainWindow):
         # Agora o ensureCursorVisible funciona perfeitamente pois estamos na thread certa
         cursor = self.output_widget.textCursor()
         self.output_widget.moveCursor(cursor.MoveOperation.End)
+
+    def _carregar_ultima_sessao(self):
+        if os.path.exists(self.session_file):
+            try:
+                with open(self.session_file, "r", encoding="utf-8") as f:
+                    path = f.read().strip()
+                    if path and os.path.exists(path):
+                        # Em vez de abrir uma nova aba, atualizamos a que já existe
+                        with open(path, "r", encoding="utf-8") as file_content:
+                            conteudo = file_content.read()
+                            
+                        editor = self.editor_tabs.currentWidget()
+                        if editor:
+                            editor.setPlainText(conteudo)
+                            self.current_file_path = path
+                            self.editor_tabs.setTabText(0, os.path.basename(path))
+                        return
+            except Exception as e:
+                self.log_to_output(f"Erro ao restaurar sessão: {e}")
 
     # ==========================================
     # INTEGRAÇÃO COM HARDWARE
