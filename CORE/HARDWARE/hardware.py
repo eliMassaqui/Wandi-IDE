@@ -7,84 +7,62 @@ from PyQt6.QtCore import QThread, pyqtSignal
 # =======================================================
 # 1. DETECÇÃO DE PORTAS
 # =======================================================
-def obter_portas_disponiveis():
-    """
-    Retorna uma lista de strings com os nomes das portas COM disponíveis.
-    Ex: ['COM3', 'COM5']
-    """
-    portas = serial.tools.list_ports.comports()
-    return [porta.device for porta in portas]
+def obter_portas_disponiveis() -> list[str]:
+    """Retorna lista de strings com os nomes das portas COM disponíveis."""
+    return [porta.device for porta in serial.tools.list_ports.comports()]
 
 
 # =======================================================
 # 2. COMPILAÇÃO E UPLOAD (ARDUINO CLI)
 # =======================================================
 class ArduinoCLI:
-    def __init__(self, cli_path, fqbn="arduino:avr:uno"):
+    def __init__(self, cli_path: str, fqbn: str = "arduino:avr:uno"):
         self.cli_path = cli_path
         self.fqbn = fqbn
 
-    def compilar(self, sketch_path, callback_log):
-        """
-        Roda a compilação. callback_log é uma função para enviar os prints para a GUI.
-        """
-        def _tarefa_compilar():
-            callback_log("--- [Wandi Engine] Iniciando Compilação ---")
-            cmd = [self.cli_path, "compile", "--fqbn", self.fqbn, sketch_path]
-            
+    def _executar_comando(self, cmd: list[str], msg_inicio: str, msg_sucesso: str, msg_erro: str, callback_log):
+        """Método auxiliar interno para evitar repetição de código (DRY) na criação de threads e subprocessos."""
+        def tarefa():
+            callback_log(f"--- [Wandi Engine] {msg_inicio} ---")
             try:
                 processo = subprocess.run(cmd, capture_output=True, text=True)
                 if processo.returncode == 0:
-                    callback_log("✔ SUCESSO: Código compilado!")
+                    callback_log(f"✔ SUCESSO: {msg_sucesso}")
                     if processo.stdout.strip(): callback_log(processo.stdout)
                 else:
-                    callback_log("❌ ERRO NA COMPILAÇÃO:")
-                    callback_log(processo.stderr)
+                    callback_log(f"❌ {msg_erro}")
+                    if processo.stderr.strip(): callback_log(processo.stderr)
             except Exception as e:
-                callback_log(f"Erro ao tentar compilar: {e}")
+                callback_log(f"Erro inesperado no processo: {e}")
 
-        # Roda em thread para não travar a GUI
-        threading.Thread(target=_tarefa_compilar, daemon=True).start()
+        threading.Thread(target=tarefa, daemon=True).start()
 
-    def upload(self, sketch_path, porta, callback_log):
-        """
-        Roda o upload para a placa conectada na porta especificada.
-        """
-        if not porta:
+    def compilar(self, sketch_path: str, callback_log):
+        cmd = [self.cli_path, "compile", "--fqbn", self.fqbn, sketch_path]
+        self._executar_comando(
+            cmd, "Iniciando Compilação", "Código compilado!", "ERRO NA COMPILAÇÃO:", callback_log
+        )
+
+    def upload(self, sketch_path: str, porta: str, callback_log):
+        if not porta or porta == "Nenhuma porta":
             callback_log("❌ ERRO: Nenhuma porta selecionada para o upload.")
             return
 
-        def _tarefa_upload():
-            callback_log(f"--- [Wandi Engine] Iniciando Upload na porta {porta} ---")
-            cmd = [self.cli_path, "upload", "-p", porta, "--fqbn", self.fqbn, sketch_path]
-            
-            try:
-                processo = subprocess.run(cmd, capture_output=True, text=True)
-                if processo.returncode == 0:
-                    callback_log(f"✔ SUCESSO: Upload concluído na {porta}!")
-                    if processo.stdout.strip(): callback_log(processo.stdout)
-                else:
-                    callback_log("❌ ERRO NO UPLOAD:")
-                    callback_log(processo.stderr)
-            except Exception as e:
-                callback_log(f"Erro ao tentar fazer upload: {e}")
-
-        threading.Thread(target=_tarefa_upload, daemon=True).start()
+        cmd = [self.cli_path, "upload", "-p", porta, "--fqbn", self.fqbn, sketch_path]
+        self._executar_comando(
+            cmd, f"Iniciando Upload na porta {porta}", f"Upload concluído na {porta}!", "ERRO NO UPLOAD:", callback_log
+        )
 
 
 # =======================================================
 # 3. COMUNICAÇÃO SERIAL (ASSÍNCRONA)
 # =======================================================
 class MonitorSerial(QThread):
-    """
-    Usa QThread para ler a porta serial continuamente em segundo plano,
-    emitindo sinais para atualizar a interface gráfica sem travamentos.
-    """
     dados_recebidos = pyqtSignal(str)
     erro_serial = pyqtSignal(str)
-    conexao_status = pyqtSignal(bool) # True = conectado, False = desconectado
+    conexao_status = pyqtSignal(bool) 
 
-    def __init__(self, porta, baudrate=9600):
+    def __init__(self, porta: str, baudrate: int = 9600):
         super().__init__()
         self.porta = porta
         self.baudrate = baudrate
@@ -96,32 +74,27 @@ class MonitorSerial(QThread):
             self.serial_conn = serial.Serial(self.porta, self.baudrate, timeout=1)
             self.rodando = True
             self.conexao_status.emit(True)
-            self.dados_recebidos.emit(f"--- Conectado a {self.porta} a {self.baudrate} baud ---\n")
+            self.dados_recebidos.emit(f"--- Conectado a {self.porta} ({self.baudrate} baud) ---\n")
             
             while self.rodando and self.serial_conn.is_open:
                 if self.serial_conn.in_waiting > 0:
-                    # Lê a linha, decodifica ignorando erros de caracteres estranhos
                     linha = self.serial_conn.readline().decode('utf-8', errors='ignore').strip()
                     if linha:
                         self.dados_recebidos.emit(linha)
         except Exception as e:
-            self.erro_serial.emit(f"Erro na porta serial: {str(e)}")
+            self.erro_serial.emit(f"Erro na porta serial: {e}")
         finally:
             self.parar()
 
-    def enviar(self, texto):
-        """Envia um comando de texto para a placa Arduino"""
+    def enviar(self, texto: str):
         if self.serial_conn and self.serial_conn.is_open:
             try:
-                # Adiciona quebra de linha (padrão Arduino Serial.readStringUntil('\n'))
-                comando = f"{texto}\n".encode('utf-8')
-                self.serial_conn.write(comando)
-                self.dados_recebidos.emit(f"> {texto}") # Ecoa na tela o que foi enviado
+                self.serial_conn.write(f"{texto}\n".encode('utf-8'))
+                self.dados_recebidos.emit(f"> {texto}") 
             except Exception as e:
-                self.erro_serial.emit(f"Erro ao enviar: {str(e)}")
+                self.erro_serial.emit(f"Erro ao enviar: {e}")
 
     def parar(self):
-        """Encerra a conexão serial de forma limpa"""
         self.rodando = False
         if self.serial_conn and self.serial_conn.is_open:
             self.serial_conn.close()
