@@ -99,46 +99,49 @@ class WandiMenu:
             print(f"Erro: {e}")
 
     def _guardar_arquivo(self):
-        editor = self.parent.editor_tabs.currentWidget()
-        if not editor: return
+            editor = self.parent.editor_tabs.currentWidget()
+            if not editor: return
 
-        # Se já sabemos o caminho, salvamos direto nele (Evita duplicados)
-        if self.parent.current_file_path and os.path.exists(self.parent.current_file_path):
-            caminho_completo = self.parent.current_file_path
-        else:
-            # Só cria nome aleatório se for um arquivo REALMENTE novo e nunca salvo
-            sufixo = random.randint(100, 999)
-            nome_arquivo = f"projeto_{sufixo}.py"
-            caminho_completo = os.path.join(self.default_dir, nome_arquivo)
-            self.parent.current_file_path = caminho_completo
+            # Se a IDE já conhece o caminho (via Abrir, Guardar Como ou Sessão anterior)
+            if hasattr(self.parent, 'current_file_path') and self.parent.current_file_path:
+                caminho_completo = self.parent.current_file_path
+            else:
+                # Se é um arquivo novo ("Código Wandi"), força o usuário a dar um nome real
+                self._guardar_como()
+                return
 
-        try:
-            with open(caminho_completo, "w", encoding="utf-8") as f:
-                f.write(editor.toPlainText())
-            
-            # Atualiza a UI
-            self.parent.editor_tabs.setTabText(self.parent.editor_tabs.currentIndex(), os.path.basename(caminho_completo))
-            self.parent.statusBar().showMessage(f"Guardado em: {caminho_completo}")
-            
-            # Salva para a próxima vez que abrir o app
-            with open(self.parent.session_file, "w", encoding="utf-8") as s:
-                s.write(caminho_completo)
+            try:
+                with open(caminho_completo, "w", encoding="utf-8") as f:
+                    f.write(editor.toPlainText())
                 
-        except Exception as e:
-            self.parent.log_to_output(f"Erro ao salvar: {e}")
+                self.parent.statusBar().showMessage(f"Alterações guardadas: {os.path.basename(caminho_completo)}")
+            except Exception as e:
+                self.parent.log_to_output(f"❌ Erro ao salvar: {e}")
 
     def _guardar_como(self):
-        caminho, _ = QFileDialog.getSaveFileName(self.parent, "Guardar Como", self.default_dir, "Python Files (*.py)")
-        if caminho:
-            try:
-                editor = self.parent.editor_tabs.currentWidget()
-                if editor:
-                    with open(caminho, "w", encoding="utf-8") as f:
-                        f.write(editor.toPlainText())
-                    self.parent.editor_tabs.setTabText(self.parent.editor_tabs.currentIndex(), os.path.basename(caminho))
-                    self.parent.statusBar().showMessage(f"Salvo em: {caminho}")
-            except Exception as e:
-                QMessageBox.critical(self.parent, "Erro", f"Erro ao guardar: {e}")
+            caminho, _ = QFileDialog.getSaveFileName(self.parent, "Guardar Como", self.default_dir, "Python Files (*.py)")
+            if caminho:
+                try:
+                    editor = self.parent.editor_tabs.currentWidget()
+                    if editor:
+                        with open(caminho, "w", encoding="utf-8") as f:
+                            f.write(editor.toPlainText())
+                        
+                        # --- VITAL: Atualiza o caminho na IDE para o Ctrl+S funcionar ---
+                        self.parent.current_file_path = caminho 
+                        
+                        # Atualiza a interface
+                        nome_arquivo = os.path.basename(caminho)
+                        self.parent.editor_tabs.setTabText(self.parent.editor_tabs.currentIndex(), nome_arquivo)
+                        self.parent.statusBar().showMessage(f"Salvo em: {caminho}")
+
+                        # Salva na sessão para o app reabrir este arquivo no futuro
+                        if hasattr(self.parent, 'session_file'):
+                            with open(self.parent.session_file, "w", encoding="utf-8") as s:
+                                s.write(caminho)
+
+                except Exception as e:
+                    QMessageBox.critical(self.parent, "Erro", f"Erro ao guardar: {e}")
 
     # --- APOIO ---
     def _add_action(self, menu, text, func):
