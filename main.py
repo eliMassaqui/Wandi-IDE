@@ -54,6 +54,11 @@ class WandiIDE(QMainWindow):
         self.current_file_path = None 
         self.session_file = os.path.join(self.base_path, "last_session.txt") # Guarda o caminho do último arquivo aberto
 
+        # --- CONFIGURAÇÃO DO AUTO-SAVE (30 SEGUNDOS) ---
+        self.timer_autosave = QTimer(self)
+        self.timer_autosave.timeout.connect(self._executar_autosave)
+        self.timer_autosave.start(30000) # 30000 ms = 30 segundos
+
         # Modifique o final do __init__ ou o singleShot:
         QTimer.singleShot(100, self._carregar_ultima_sessao)
         
@@ -166,6 +171,31 @@ class WandiIDE(QMainWindow):
                         return
             except Exception as e:
                 self.log_to_output(f"Erro ao restaurar sessão: {e}")
+
+    def _executar_autosave(self):
+        index = self.editor_tabs.currentIndex()
+        if index == -1: 
+            return
+        
+        titulo_aba = self.editor_tabs.tabText(index)
+        
+        # Só salva se o arquivo foi modificado (*) e se já tem um caminho no sistema
+        if "*" in titulo_aba and hasattr(self, 'current_file_path') and self.current_file_path:
+            self.menu_manager._guardar_arquivo()
+            # Mostra um aviso discreto na barra de status por 3 segundos
+            self.statusBar().showMessage(f"Auto-salvo: {os.path.basename(self.current_file_path)}", 3000)
+
+    def marcar_como_modificado(self):
+        """Adiciona um asterisco ao título da aba se o conteúdo for alterado."""
+        index = self.editor_tabs.currentIndex()
+        if index == -1:
+            return
+            
+        texto_atual = self.editor_tabs.tabText(index)
+        
+        # Só adiciona o asterisco se ele ainda não estiver lá
+        if not texto_atual.endswith("*"):
+            self.editor_tabs.setTabText(index, texto_atual + "*")
 
     # ==========================================
     # INTEGRAÇÃO COM HARDWARE
@@ -324,6 +354,8 @@ class WandiIDE(QMainWindow):
         editor = WandiCodeLinhas() 
         editor.setFont(QFont("Consolas", 12))
         editor.setPlainText("def setup():\n    pass\n\ndef loop():\n    pass")
+
+        editor.textChanged.connect(self.marcar_como_modificado)
         
         self.editor_tabs.addTab(editor, "Código Wandi")
         self.setCentralWidget(self.editor_tabs)

@@ -102,21 +102,24 @@ class WandiMenu:
             editor = self.parent.editor_tabs.currentWidget()
             if not editor: return
 
-            # Se a IDE já conhece o caminho (via Abrir, Guardar Como ou Sessão anterior)
             if hasattr(self.parent, 'current_file_path') and self.parent.current_file_path:
                 caminho_completo = self.parent.current_file_path
             else:
-                # Se é um arquivo novo ("Código Wandi"), força o usuário a dar um nome real
-                self._guardar_como()
-                return
+                # Se for um arquivo novo sem nome, o auto-save não faz nada
+                # (evita abrir janelas de diálogo sozinhas)
+                return 
 
             try:
                 with open(caminho_completo, "w", encoding="utf-8") as f:
                     f.write(editor.toPlainText())
                 
-                self.parent.statusBar().showMessage(f"Alterações guardadas: {os.path.basename(caminho_completo)}")
+                # Remove o asterisco da aba após o sucesso
+                index = self.parent.editor_tabs.currentIndex()
+                nome_limpo = os.path.basename(caminho_completo)
+                self.parent.editor_tabs.setTabText(index, nome_limpo)
+                
             except Exception as e:
-                self.parent.log_to_output(f"❌ Erro ao salvar: {e}")
+                self.parent.log_to_output(f"Erro no Auto-Save: {e}")
 
     def _guardar_como(self):
             caminho, _ = QFileDialog.getSaveFileName(self.parent, "Guardar Como", self.default_dir, "Python Files (*.py)")
