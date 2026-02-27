@@ -74,6 +74,9 @@ class WandiMenu:
         # Usar o seu widget que contém a lógica de linhas
         novo_editor = WandiCodeLinhas() 
         novo_editor.setFont(QFont("Consolas", 13))
+
+        # VITAL: Conecta o sinal de modificação para a nova aba ter asterisco
+        novo_editor.textChanged.connect(self.parent.marcar_como_modificado)
         
         # Aplica o Highlighter na nova aba
         self.parent.highlighter = WandiHighlighter(novo_editor.document())

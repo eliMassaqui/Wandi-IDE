@@ -173,17 +173,40 @@ class WandiIDE(QMainWindow):
                 self.log_to_output(f"Erro ao restaurar sessão: {e}")
 
     def _executar_autosave(self):
-        index = self.editor_tabs.currentIndex()
-        if index == -1: 
-            return
+            # Percorre todas as abas abertas no editor
+            for i in range(self.editor_tabs.count()):
+                titulo_aba = self.editor_tabs.tabText(i)
+                
+                # Se a aba tem o asterisco, ela precisa ser salva
+                if "*" in titulo_aba:
+                    editor = self.editor_tabs.widget(i)
+                    
+                    # Precisamos saber o caminho desse arquivo específico.
+                    # Como você pode ter várias abas, o ideal é que cada editor guarde seu próprio caminho.
+                    # Se ainda não implementou isso, usaremos uma verificação de segurança:
+                    if hasattr(self, 'current_file_path') and self.current_file_path:
+                        # Se for a aba principal/atual
+                        if i == self.editor_tabs.currentIndex():
+                            self.menu_manager._guardar_arquivo()
+                        else:
+                            # Para abas em segundo plano, salvamos silenciosamente
+                            self._salvar_aba_especifica(i)
+
+
+    def _salvar_aba_especifica(self, index):
+        editor = self.editor_tabs.widget(index)
+        nome_arquivo = self.editor_tabs.tabText(index).replace("*", "")
         
-        titulo_aba = self.editor_tabs.tabText(index)
+        # Tenta encontrar o caminho completo para esse arquivo na sua pasta padrão
+        caminho = os.path.join(self.menu_manager.default_dir, nome_arquivo)
         
-        # Só salva se o arquivo foi modificado (*) e se já tem um caminho no sistema
-        if "*" in titulo_aba and hasattr(self, 'current_file_path') and self.current_file_path:
-            self.menu_manager._guardar_arquivo()
-            # Mostra um aviso discreto na barra de status por 3 segundos
-            self.statusBar().showMessage(f"Auto-salvo: {os.path.basename(self.current_file_path)}", 3000)
+        if os.path.exists(caminho):
+            try:
+                with open(caminho, "w", encoding="utf-8") as f:
+                    f.write(editor.toPlainText())
+                self.editor_tabs.setTabText(index, nome_arquivo)
+            except Exception as e:
+                print(f"Erro no auto-save da aba {index}: {e}")
 
     def marcar_como_modificado(self):
         """Adiciona um asterisco ao título da aba se o conteúdo for alterado."""
