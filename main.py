@@ -295,7 +295,6 @@ class WandiIDE(QMainWindow):
         if self.thread_serial and self.thread_serial.isRunning():
             self.thread_serial.parar()
             self.thread_serial = None
-            # Avisa o simulador que o hardware desligou (se houver conexão WS ativa)
             self.web_bridge.send_to_web("STATUS:OFF")
             self._atualizar_ui_serial_desconectado()
         else:
@@ -303,11 +302,13 @@ class WandiIDE(QMainWindow):
             if porta == "Nenhuma porta" or not porta: return
                 
             self.thread_serial = MonitorSerial(porta)
-            # APENAS conecta o dado. O status é gerido pelo Bridge.
             self.thread_serial.dados_recebidos.connect(self.web_bridge.send_to_web)
             self.thread_serial.start()
             
-            # Avisa o simulador que o hardware ligou
+            # --- ADICIONE ESTA LINHA AQUI ---
+            self.simulation_view.reload() 
+            # -------------------------------
+
             self.web_bridge.send_to_web("STATUS:ON")
             self._atualizar_ui_serial_conectado()
 
