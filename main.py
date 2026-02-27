@@ -37,8 +37,13 @@ class ConsoleStream(QObject):
 
 
 class WandiIDE(QMainWindow):
+    # Sinal para atualizar o log com segurança entre threads
+    signal_log = pyqtSignal(str)
     def __init__(self):
         super().__init__()
+
+        # Conectar o sinal ao método real de escrita
+        self.signal_log.connect(self._escrever_no_log)
 
         # --- CAMINHOS E FERRAMENTAS ---
         self.base_path = os.path.join(os.path.expanduser("~"), "Documents", "Wandi Studio", "Engine")
@@ -116,13 +121,25 @@ class WandiIDE(QMainWindow):
         self.reposicionar_toasts()
 
     def log_to_output(self, text):
+        """Método chamado pelas threads (ArduinoCLI, etc)"""
+        if not text: return
+        
+        # Sua lógica original de filtros
         termos_motor = ["Sincronizando", "Instalando", "Provisionando", "Verificando", "✅", "Downloading"]
         if any(termo in text for termo in termos_motor):
             return
 
+        # Emite o sinal. O PyQt jogará isso para a thread principal automaticamente.
+        self.signal_log.emit(text)
+
+    def _escrever_no_log(self, text):
+        """Método que roda apenas na Thread da UI (Seguro)"""
         self.output_widget.setFont(QFont("Consolas", 10))
-        self.output_widget.append(text) 
-        self.output_widget.ensureCursorVisible()
+        self.output_widget.append(text)
+        
+        # Agora o ensureCursorVisible funciona perfeitamente pois estamos na thread certa
+        cursor = self.output_widget.textCursor()
+        self.output_widget.moveCursor(cursor.MoveOperation.End)
 
     # ==========================================
     # INTEGRAÇÃO COM HARDWARE
@@ -139,53 +156,55 @@ class WandiIDE(QMainWindow):
         else:
             self.port.addItem("Nenhuma porta")
 
-    def disparar_compilacao(self):
-        # 1. Primeiro Garante que o arquivo está salvo
-        # Chamamos a lógica de guardar do menu
-        self.menu_manager._guardar_arquivo()
-        
-        # 2. Obtém o nome do arquivo atual para passar ao compilador
-        # (Arduino CLI precisa do caminho da pasta/arquivo .ino gerado)
-        self.statusBar().showMessage("Salvando e Compilando...")
-        
-        # Chama a compilação (que já usa a wiring_folder definida no seu __init__)
-        self.arduino_cli.compilar(self.wiring_folder, self.log_to_output)
-
-    def disparar_upload(self):
-        # 1. Salva o trabalho atual
-        self.menu_manager._guardar_arquivo()
-        
-        porta = self.port.currentText()
-        if porta == "Nenhuma porta" or not porta:
-            self.log_to_output("❌ Erro: Selecione uma porta serial antes do Upload.")
-            return
-
-        # 2. Traduz o código Python para C++ (Wiring)
+    def preparar_pasta_wiring(self):
+        """Método auxiliar para traduzir e salvar o arquivo .ino antes do hardware."""
         editor = self.editor_tabs.currentWidget()
-        if not editor: return
+        if not editor: return False
         
         codigo_python = editor.toPlainText()
         codigo_cpp = self.tradutor.translate(codigo_python)
         
         if "ERRO" in codigo_cpp:
             self.log_to_output(f"❌ Erro de Tradução: {codigo_cpp}")
+            return False
+
+        try:
+            os.makedirs(self.wiring_folder, exist_ok=True)
+            ino_path = os.path.join(self.wiring_folder, "WIRING.ino")
+            with open(ino_path, "w", encoding="utf-8") as f:
+                f.write(codigo_cpp)
+            return True
+        except Exception as e:
+            self.log_to_output(f"❌ Erro ao gravar arquivo: {e}")
+            return False
+
+    def disparar_compilacao(self):
+        # 1. Salva o .py original
+        self.menu_manager._guardar_arquivo()
+        
+        # 2. Traduz para .ino (Essencial para o compilador ler o código novo)
+        if self.preparar_pasta_wiring():
+            self.statusBar().showMessage("Compilando código...")
+            self.arduino_cli.compilar(self.wiring_folder, self.log_to_output)
+
+    def disparar_upload(self):
+        self.menu_manager._guardar_arquivo()
+        porta = self.port.currentText()
+        
+        if porta == "Nenhuma porta" or not porta:
+            self.log_to_output("❌ Erro: Selecione uma porta serial antes do Upload.")
             return
 
-        # 3. Grava o arquivo .ino na pasta de trabalho
-        os.makedirs(self.wiring_folder, exist_ok=True)
-        ino_path = os.path.join(self.wiring_folder, "WIRING.ino")
-        with open(ino_path, "w", encoding="utf-8") as f:
-            f.write(codigo_cpp)
+        # Traduz e prepara (conforme sua lógica)
+        if not self.preparar_pasta_wiring():
+            return
 
-        # 4. Ordem Arduino: Compila primeiro, e se o retorno for sucesso, faz o Upload
-        # Para fazer isso de forma limpa com sua classe ArduinoCLI atual:
         self.log_to_output("--- Iniciando Ciclo: Compilação -> Upload ---")
         
-        # Criamos um callback especial que dispara o upload se a compilação terminar bem
         def callback_verificador(mensagem):
-            self.log_to_output(mensagem)
+            # Este callback vem da thread do subprocesso, mas o sinal resolve o crash
+            self.log_to_output(mensagem) 
             if "✔ SUCESSO: Código compilado!" in mensagem:
-                # Se compilou com sucesso, chama o upload
                 self.arduino_cli.upload(self.wiring_folder, porta, self.log_to_output)
 
         self.arduino_cli.compilar(self.wiring_folder, callback_verificador)
