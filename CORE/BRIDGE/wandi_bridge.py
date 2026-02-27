@@ -45,13 +45,17 @@ class WandiBridge(QObject):
             self.clients.remove(websocket)
 
     def send_to_web(self, message):
-        """Envia dados para o simulador sem risco de crash"""
-        if not self.clients or not self.loop: return
-        
-        async def broadcast():
-            for ws in list(self.clients):
-                try: await ws.send(str(message))
-                except: pass
-        
-        # Agenda o envio de forma segura entre threads
-        self.loop.call_soon_thread_safe(asyncio.create_task, broadcast())
+            if not self.loop or not self.loop.is_running(): 
+                return
+                
+            async def broadcast():
+                for ws in list(self.clients):
+                    try:
+                        await ws.send(str(message))
+                    except:
+                        pass
+
+            # CORREÇÃO: call_soon_threadsafe (Tudo junto no final)
+            self.loop.call_soon_threadsafe(
+                lambda: asyncio.create_task(broadcast())
+            )
