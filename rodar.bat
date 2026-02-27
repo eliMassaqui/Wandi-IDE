@@ -1,78 +1,64 @@
 @echo off
-:: Configura o console para UTF-8 (corrige acentos e símbolos)
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 :: Cores ANSI
-set "P=[95m" & :: Roxo (Wandi)
-set "G=[92m" & :: Verde (Sucesso)
-set "Y=[93m" & :: Amarelo (Ação)
-set "B=[94m" & :: Azul (Info)
-set "R=[91m" & :: Vermelho (Erro)
-set "W=[0m"  & :: Reset
+set "P=[95m" & set "G=[92m" & set "Y=[93m" & set "B=[94m" & set "R=[91m" & set "W=[0m"
 
 cls
 echo %P%===========================================================%W%
-echo %P%🚀         WANDI IDE - PREPARANDO O SEU AMBIENTE          %W%
+echo %P%🚀          WANDI IDE - PREPARANDO O SEU AMBIENTE          %W%
 echo %P%===========================================================%W%
-echo.
 
 :: --- ETAPA 1: PYTHON ---
-echo %B%[ETAPA 1/3]%W% %Y%Instalando o motor: Python 3.13...%W%
+echo.
+echo %B%[ETAPA 1/3]%W% %Y%Verificando Python 3.13...%W%
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo %B%[PROGRESSO]%W% [%G%####      %W%] 40%% - Extraindo arquivos...
-    start /wait "" "ATRACAR\python-3.13.12-amd64.exe" /quiet InstallAllUsers=1 PrependPath=1
-    echo %B%[PROGRESSO]%W% [%G%##########%W%] 100%% - Python configurado!
-    echo %G%[OK] Python integrado ao sistema.%W%
+    if exist "ATRACAR\python-3.13.12-amd64.exe" (
+        echo %B%[PROGRESSO]%W% [%G%####      %W%] 40%% - Instalando...
+        "ATRACAR\python-3.13.12-amd64.exe" /quiet InstallAllUsers=1 PrependPath=1
+        echo %G%[OK] Python configurado!%W%
+    ) else (
+        echo %R%[AVISO] Instalador do Python não encontrado em ATRACAR\.%W%
+    )
 ) else (
-    echo %G%[OK] Python já detectado. Pulando instalação...%W%
+    echo %G%[OK] Python já detectado.%W%
 )
 
-echo.
 :: --- ETAPA 2: GIT ---
-echo %B%[ETAPA 2/3]%W% %Y%Instalando o navegador de versões: Git...%W%
+echo.
+echo %B%[ETAPA 2/3]%W% %Y%Verificando Git...%W%
 git --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo %B%[PROGRESSO]%W% [%G%##        %W%] 20%% - Iniciando setup silencioso...
-    start /wait "" "ATRACAR\Git-2.53.0-64-bit.exe" /VERYSILENT /NORESTART
-    echo %B%[PROGRESSO]%W% [%G%##########%W%] 100%% - Git configurado!
-    echo %G%[OK] Git pronto para uso.%W%
+    if exist "ATRACAR\Git-2.53.0-64-bit.exe" (
+        echo %B%[PROGRESSO]%W% [%G%##        %W%] 20%% - Iniciando setup...
+        "ATRACAR\Git-2.53.0-64-bit.exe" /VERYSILENT /NORESTART
+        echo %G%[OK] Git pronto para uso.%W%
+    ) else (
+        echo %R%[AVISO] Instalador do Git não encontrado em ATRACAR\.%W%
+    )
 ) else (
-    echo %G%[OK] Git já está presente no sistema.%W%
+    echo %G%[OK] Git já está presente.%W%
+
 )
 
-echo.
 :: --- ETAPA 3: BIBLIOTECAS ---
-echo %B%[ETAPA 3/3]%W% %Y%Sincronizando bibliotecas da Wandi IDE...%W%
-echo %B%[INFO]%W% Isso depende da sua internet e velocidade do disco.
-
-echo %Y%-> Atualizando Pip...%W%
+echo.
+echo %B%[ETAPA 3/3]%W% %Y%Sincronizando bibliotecas...%W%
 python -m pip install --upgrade pip --quiet
-
-echo %Y%-> Instalando PySerial (Comunicação USB)...%W%
-python -m pip install pyserial --quiet
-echo %B%[PROGRESSO]%W% [%G%###        %W%] 30%%
-
-echo %Y%-> Instalando PyQt6 (Interface Gráfica)...%W%
-python -m pip install pyqt6 pyqt6-webengine --quiet
-echo %B%[PROGRESSO]%W% [%G%#######     %W%] 70%%
-
-echo %Y%-> Instalando PyInstaller (Gerador de Executáveis)...%W%
-python -m pip install pyinstaller --quiet
-echo %B%[PROGRESSO]%W% [%G%##########%W%] 100%%
+python -m pip install pyserial pyqt6 pyqt6-webengine pyinstaller --quiet
 
 echo.
-echo %G%🎉 TUDO PRONTO! O AMBIENTE ESTÁ LÚCIDO E OPERACIONAL.%W%
+echo %G%🎉 TUDO PRONTO! AMBIENTE LÚCIDO E OPERACIONAL.%W%
 echo %P%-----------------------------------------------------------%W%
 echo %P%            Iniciando main.py...                           %W%
 echo %P%-----------------------------------------------------------%W%
-echo.
 
 python main.py
 
 if %errorlevel% neq 0 (
     echo.
-    echo %R%[!] Oops! A Wandi IDE fechou com um erro inesperado.%W%
+    echo %R%[!] Erro crítico ao iniciar o main.py.%W%
     pause
 )
