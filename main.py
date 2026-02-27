@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QAction, QIcon, QFont
 from PyQt6.QtCore import Qt, QUrl, QSize, pyqtSignal, QObject, QTimer
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWebChannel import QWebChannel
 
 # Suas importações internas
 from EDITOR.compilador import compiladorWandi
@@ -22,7 +23,7 @@ from CORE.LINHAS.linhas import WandiCodeLinhas
 from CORE.SINTAXE.highlighter import WandiHighlighter
 from CORE.NOTES.notificacoes import WandiToast
 from CORE.HARDWARE.hardware import obter_portas_disponiveis, ArduinoCLI, MonitorSerial
-
+from CORE.BRIDGE.wandi_bridge import WandiBridge
 
 class ConsoleStream(QObject):
     """Desvia o print (stdout) para emitir sinais capturáveis pela GUI."""
@@ -41,6 +42,8 @@ class WandiIDE(QMainWindow):
     signal_log = pyqtSignal(str)
     def __init__(self):
         super().__init__()
+
+        self.web_bridge = WandiBridge(self) # Inicializa o servidor WebSocket
 
         # Conectar o sinal ao método real de escrita
         self.signal_log.connect(self._escrever_no_log)
@@ -292,20 +295,21 @@ class WandiIDE(QMainWindow):
         if self.thread_serial and self.thread_serial.isRunning():
             self.thread_serial.parar()
             self.thread_serial = None
+            # Avisa o simulador que o hardware desligou (se houver conexão WS ativa)
+            self.web_bridge.send_to_web("STATUS:OFF")
             self._atualizar_ui_serial_desconectado()
         else:
             porta = self.port.currentText()
-            if porta == "Nenhuma porta" or not porta:
-                self.serial_widget.append("❌ Selecione uma porta primeiro.")
-                return
+            if porta == "Nenhuma porta" or not porta: return
                 
             self.thread_serial = MonitorSerial(porta)
-            self.thread_serial.dados_recebidos.connect(self.serial_widget.append)
-            self.thread_serial.erro_serial.connect(self.serial_widget.append)
-            
+            # APENAS conecta o dado. O status é gerido pelo Bridge.
+            self.thread_serial.dados_recebidos.connect(self.web_bridge.send_to_web)
             self.thread_serial.start()
+            
+            # Avisa o simulador que o hardware ligou
+            self.web_bridge.send_to_web("STATUS:ON")
             self._atualizar_ui_serial_conectado()
-            self.console_tabs.setCurrentIndex(1) 
 
     def enviar_comando_serial(self):
         texto = self.serial_input.text().strip()
@@ -455,6 +459,12 @@ class WandiIDE(QMainWindow):
         self.project_stack = QStackedWidget()
         
         self.simulation_view = QWebEngineView()
+        
+        # --- INICIALIZAÇÃO DA PONTE VIA WEBSOCKET ---
+        # Note que não precisamos mais do QWebChannel para o Vercel
+        self.web_bridge = WandiBridge(self) 
+        # --------------------------------------------
+
         self.simulation_view.load(QUrl("https://simulation-one.vercel.app/"))
         self.library_manager = WandiLibManager()
         
