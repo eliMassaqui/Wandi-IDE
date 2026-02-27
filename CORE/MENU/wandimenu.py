@@ -8,6 +8,8 @@ from PyQt6.QtGui import QAction, QKeySequence, QFont
 from CORE.LINHAS.linhas import WandiCodeLinhas
 from CORE.SINTAXE.highlighter import WandiHighlighter
 
+from CORE.MENU.exemplos import WandiExemplos
+
 class WandiMenu:
     def __init__(self, parent):
         self.parent = parent
@@ -20,6 +22,9 @@ class WandiMenu:
     def _setup_menu_backend(self):
         menubar = self.parent.menuBar()
         menubar.clear() 
+
+        self.wandi_menu = menubar.addMenu("Wandi")
+        self.gerenciador_exemplos = WandiExemplos(self.wandi_menu, self.parent)
 
         # --- FICHEIRO ---
         self.file_menu = menubar.addMenu("Ficheiro")
@@ -42,7 +47,7 @@ class WandiMenu:
         self._add_action(self.edit_menu, "Selecionar tudo", self._select_all_action).setShortcut(QKeySequence(QKeySequence.StandardKey.SelectAll))
 
         # --- WANDI (RESTAURADO COMPLETO) ---
-        self.wandi_menu = menubar.addMenu("Wandi")
+        self.wandi_menu = menubar.addMenu("Ferramentas")
         self._add_action(self.wandi_menu, "Mensageiro", lambda: self.parent.console_dock.show())
         self.wandi_menu.addSeparator()
         self._add_action(self.wandi_menu, "Compilar", self.parent.disparar_compilacao).setShortcut(QKeySequence("F5"))
