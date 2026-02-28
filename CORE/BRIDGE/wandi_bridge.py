@@ -32,30 +32,35 @@ class WandiBridge(QObject):
     async def _handler(self, websocket):
         self.clients.add(websocket)
         try:
-            # Ao conectar, informa imediatamente se o hardware já está ativo
-            is_active = self.main_window.thread_serial is not None and self.main_window.thread_serial.isRunning()
-            await websocket.send(f"STATUS:{'ON' if is_active else 'OFF'}")
+            # --- NOVO: Verifica se a serial já está rodando na IDE ---
+            serial_ativa = (self.main_window.thread_serial is not None and 
+                            self.main_window.thread_serial.isRunning())
+            
+            # Avisa a Web assim que ela conectar
+            await websocket.send(f"STATUS:{'ON' if serial_ativa else 'OFF'}")
             
             async for message in websocket:
                 # Web -> Hardware
-                if self.main_window.thread_serial and self.main_window.thread_serial.isRunning():
+                if serial_ativa:
                     self.main_window.thread_serial.enviar(message)
-        except: pass
+        except: 
+            pass
         finally:
             self.clients.remove(websocket)
 
     def send_to_web(self, message):
-            if not self.loop or not self.loop.is_running(): 
-                return
-                
-            async def broadcast():
-                for ws in list(self.clients):
-                    try:
+        if not self.loop or not self.loop.is_running(): 
+            return
+            
+        async def broadcast():
+            # Filtra apenas clientes que ainda estão com a conexão aberta
+            for ws in list(self.clients):
+                try:
+                    if not ws.closed:
                         await ws.send(str(message))
-                    except:
-                        pass
+                except:
+                    pass
 
-            # CORREÇÃO: call_soon_threadsafe (Tudo junto no final)
-            self.loop.call_soon_threadsafe(
-                lambda: asyncio.create_task(broadcast())
-            )
+        self.loop.call_soon_threadsafe(
+            lambda: asyncio.create_task(broadcast())
+        )
