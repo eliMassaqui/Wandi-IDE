@@ -317,8 +317,12 @@ class WandiIDE(QMainWindow):
                 # Cria a nova thread
                 self.thread_serial = MonitorSerial(porta)
                 
-                # Conecta o sinal ANTES de iniciar
+                # Conecta os sinais ANTES de iniciar a thread
                 self.thread_serial.dados_recebidos.connect(self.web_bridge.send_to_web)
+                
+                # ---> ESTA É A LINHA QUE FALTAVA PARA EXIBIR NA IDE <---
+                self.thread_serial.dados_recebidos.connect(self.serial_widget.append)
+                
                 self.thread_serial.start()
                 
                 # Sincroniza a Web

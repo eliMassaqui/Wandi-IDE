@@ -6,6 +6,10 @@ from PyQt6.QtCore import QObject
 class WandiBridge(QObject):
     def __init__(self, main_window):
         super().__init__()
+
+        # send_to_web
+        self.buffer = ""
+        
         self.main_window = main_window
         self.clients = set()
         self.loop = None
@@ -44,18 +48,29 @@ class WandiBridge(QObject):
         finally:
             self.clients.remove(websocket)
 
+
+
     def send_to_web(self, message):
             if not self.loop or not self.loop.is_running(): 
                 return
                 
-            async def broadcast():
-                for ws in list(self.clients):
-                    try:
-                        await ws.send(str(message))
-                    except:
-                        pass
+            # 1. Acumula o que chega do hardware no buffer
+            self.buffer += str(message)
+            
+            # 2. Verifica se a mensagem está completa (presença de \n do println)
+            if "\n" in self.buffer:
+                # Extrai a linha completa e limpa o buffer para a próxima
+                msg_final = self.buffer.strip()
+                self.buffer = ""
+                
+                # 3. Dispara o envio para todos os clientes (Simulador e Monitor Live)
+                async def broadcast():
+                    for ws in list(self.clients):
+                        try:
+                            await ws.send(msg_final)
+                        except:
+                            pass
 
-            # CORREÇÃO: call_soon_threadsafe (Tudo junto no final)
-            self.loop.call_soon_threadsafe(
-                lambda: asyncio.create_task(broadcast())
-            )
+                self.loop.call_soon_threadsafe(
+                    lambda: asyncio.create_task(broadcast())
+                )
