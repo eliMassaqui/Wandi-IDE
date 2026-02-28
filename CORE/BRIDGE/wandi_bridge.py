@@ -49,18 +49,31 @@ class WandiBridge(QObject):
             self.clients.remove(websocket)
 
     def send_to_web(self, message):
-        if not self.loop or not self.loop.is_running(): 
+        if not self.loop:
             return
-            
+        
+        # Garantimos que a mensagem seja uma string simples
+        msg_str = str(message).strip()
+        if not msg_str:
+            return
+
         async def broadcast():
-            # Filtra apenas clientes que ainda estão com a conexão aberta
+            if not self.clients:
+                return
+            
+            # Criamos uma cópia para evitar erro de "Set changed size during iteration"
+            disconnected_clients = set()
             for ws in list(self.clients):
                 try:
-                    if not ws.closed:
-                        await ws.send(str(message))
-                except:
-                    pass
+                    await ws.send(msg_str)
+                except Exception:
+                    disconnected_clients.add(ws)
+            
+            # Limpeza de clientes mortos
+            for client in disconnected_clients:
+                self.clients.discard(client)
 
+        # Agenda a execução no loop da thread do servidor
         self.loop.call_soon_threadsafe(
             lambda: asyncio.create_task(broadcast())
         )

@@ -484,9 +484,6 @@ class WandiIDE(QMainWindow):
         
         self.simulation_view = QWebEngineView()
         
-        # --- INICIALIZAÇÃO DA PONTE VIA WEBSOCKET ---
-        # Note que não precisamos mais do QWebChannel para o Vercel
-        self.web_bridge = WandiBridge(self) 
         # --------------------------------------------
 
         self.simulation_view.load(QUrl("https://simulation-one.vercel.app/"))
