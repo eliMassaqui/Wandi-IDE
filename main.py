@@ -302,10 +302,9 @@ class WandiIDE(QMainWindow):
             self.thread_serial.parar()
             self.thread_serial.wait(300)
             self.thread_serial = None
-            
             self.web_bridge.send_to_web("STATUS:OFF")
             self._atualizar_ui_serial_desconectado()
-            self.simulation_view.reload() 
+            
             
         else:
             porta = self.port.currentText()
@@ -324,7 +323,6 @@ class WandiIDE(QMainWindow):
             self.thread_serial.start()
             
             # Sincroniza a Web
-            self.simulation_view.reload() 
             self.web_bridge.send_to_web("STATUS:ON")
             self._atualizar_ui_serial_conectado()
 
