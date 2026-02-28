@@ -556,18 +556,13 @@ def load_style(app):
         print(f"Erro ao carregar estilo: {e}")
 
 if __name__ == "__main__":
-    # 1. Desativa a aceleração de hardware e silencia logs do motor Chromium
-    # --disable-gpu: Mata o erro do IDCompositionDevice4 na raiz
-    # --log-level=3: Garante que apenas erros fatais apareçam no terminal
-    os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --log-level=3 --disable-software-rasterizer"
+    # 1. Configuração de compatibilidade (Equilíbrio entre estabilidade e 3D)
+    # Removemos --disable-gpu para permitir que o Three.js funcione
+    os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--ignore-gpu-blocklist --enable-gpu-rasterization --log-level=3"
 
-    # 2. Suas configurações anteriores (ajuda na estabilidade do Qt)
-    os.environ["QT_LOGGING_RULES"] = "qt.webenginecontext.debug=false"
+    # 2. Garante que o Qt tente usar OpenGL para o WebEngine
     os.environ["QT_D3D_CHECK_DEVICE_COMPATIBILITY"] = "0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     # Flags para performance máxima em 3D
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = (
         "--enable-gpu-rasterization "
@@ -576,16 +571,11 @@ if __name__ == "__main__":
         "--num-raster-threads=4"
     )
     
-=======
->>>>>>> parent of aab14c7 (WANDI COMPLETA COM SUCESSO - VERSAO COMPLETA 3D 20 POR CENTO COMPLETA E PREPARADA PRA EVOLUCAO ISOLADA - PARTE HARDWARE COMPLETA COM SUCESSO 80 POR CENTO.)
-=======
->>>>>>> parent of aab14c7 (WANDI COMPLETA COM SUCESSO - VERSAO COMPLETA 3D 20 POR CENTO COMPLETA E PREPARADA PRA EVOLUCAO ISOLADA - PARTE HARDWARE COMPLETA COM SUCESSO 80 POR CENTO.)
-=======
->>>>>>> parent of aab14c7 (WANDI COMPLETA COM SUCESSO - VERSAO COMPLETA 3D 20 POR CENTO COMPLETA E PREPARADA PRA EVOLUCAO ISOLADA - PARTE HARDWARE COMPLETA COM SUCESSO 80 POR CENTO.)
     app = QApplication(sys.argv)
     
-    # Opcional: Se o erro persistir, descomente a linha abaixo para forçar renderização via Software
-    # app.setAttribute(Qt.ApplicationAttribute.AA_UseSoftwareOpenGL)
+    # IMPORTANTE: Se o erro de "Context could not be created" persistir após 
+    # remover o --disable-gpu, descomente a linha abaixo para usar renderização via software segura:
+    # app.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL)
 
     window = WandiIDE()
     app.setFont(QFont("Consolas", 14))

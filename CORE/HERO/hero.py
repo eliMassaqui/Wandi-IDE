@@ -51,9 +51,9 @@ class WandiHeroSide(QWidget):
         
         # --- SUBTÍTULO ---
         self.subtitle = QLabel("WANDI IDE - Ambiente de desenvolvimento integrado de robótica")
-        font_sub = QFont("Segoe UI", 11)
+        font_sub = QFont("Segoe UI", 35)
         self.subtitle.setFont(font_sub)
-        self.subtitle.setStyleSheet("color: #586069; background: transparent;")
+        self.subtitle.setStyleSheet("color: #ffffff; background: transparent;")
 
         # --- BOTÃO DE AÇÃO (Simulando Google Material Design) ---
         self.btn_action = QLabel("INICIAR SIMULAÇÃO")
