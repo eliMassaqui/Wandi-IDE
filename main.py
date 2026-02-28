@@ -24,8 +24,7 @@ from CORE.SINTAXE.highlighter import WandiHighlighter
 from CORE.NOTES.notificacoes import WandiToast
 from CORE.HARDWARE.hardware import obter_portas_disponiveis, ArduinoCLI, MonitorSerial
 from CORE.BRIDGE.wandi_bridge import WandiBridge
-
-from hero import WandiHeroSide
+from CORE.HERO.hero import WandiHeroSide
 
 class ConsoleStream(QObject):
     """Desvia o print (stdout) para emitir sinais capturáveis pela GUI."""

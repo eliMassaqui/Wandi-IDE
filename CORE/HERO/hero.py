@@ -34,8 +34,13 @@ class WandiHeroSide(QWidget):
         # Centraliza a label dentro do container
         self.icon_label.move(20, 20) 
         
-        caminho_icone = os.path.join(os.path.dirname(__file__), "icons", "wandi.png")
-        self._set_circular_img(caminho_icone)
+        # Pega o caminho de D:\Wandi-IDE\CORE\HERO
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # Sobe dois níveis para chegar em D:\Wandi-IDE e entra em 'icons'
+        base_icon_path = os.path.abspath(os.path.join(current_dir, "..", "..", "icons", "wandi.png"))
+
+        # Dentro do seu __init__ ou no método onde carrega a imagem:
+        self._set_circular_img(base_icon_path)
         
         # --- TÍTULO (Estilo Google Font Roboto/Segoe) ---
         self.title = QLabel("Wandi Studio")
