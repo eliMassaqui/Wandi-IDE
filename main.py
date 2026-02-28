@@ -293,36 +293,30 @@ class WandiIDE(QMainWindow):
 
     def alternar_conexao_serial(self):
         if self.thread_serial and self.thread_serial.isRunning():
-            # Lógica de desconexão original
-            try:
-                self.thread_serial.dados_recebidos.disconnect()
-            except:
-                pass
-            
+            # ... (seu código de desconexão atual) ...
             self.thread_serial.parar()
             self.thread_serial.wait(300)
             self.thread_serial = None
             self.web_bridge.send_to_web("STATUS:OFF")
             self._atualizar_ui_serial_desconectado()
-            
-            
         else:
             porta = self.port.currentText()
             if porta == "Nenhuma porta" or not porta: 
                 return
+            
+            # --- LIMPEZA VISUAL NA IDE ---
+            self.serial_widget.clear() 
                 
             self.thread_serial = MonitorSerial(porta)
             
-            # --- AQUI ESTÁ A CHAVE: CONECTAR AMBOS OS DESTINOS ---
-            # 1. Envia para o Monitor Serial da IDE (Log visual)
-            self.thread_serial.dados_recebidos.connect(self._log_serial_local)
+            # Importante: No seu CORE.HARDWARE.hardware, certifique-se que 
+            # o método run() chama self.serial_conn.reset_input_buffer()
             
-            # 2. Envia para a Ponte Web (Simulador)
+            self.thread_serial.dados_recebidos.connect(self._log_serial_local)
             self.thread_serial.dados_recebidos.connect(self.web_bridge.send_to_web)
             
             self.thread_serial.start()
             
-            # Sincroniza a Web
             self.web_bridge.send_to_web("STATUS:ON")
             self._atualizar_ui_serial_conectado()
 

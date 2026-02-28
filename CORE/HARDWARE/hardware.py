@@ -76,22 +76,28 @@ class MonitorSerial(QThread):
         self.rodando = False
 
     def run(self):
-        try:
-            # Timeout curto para a thread responder rápido ao comando de parar
-            self.serial_conn = serial.Serial(self.porta, self.baudrate, timeout=0.1)
-            self.rodando = True
-            self.conexao_status.emit(True)
-            
-            while self.rodando:
-                if self.serial_conn and self.serial_conn.is_open:
-                    if self.serial_conn.in_waiting > 0:
-                        linha = self.serial_conn.readline().decode('utf-8', errors='ignore').strip()
-                        if linha: self.dados_recebidos.emit(linha)
-                self.msleep(10)
-        except Exception as e:
-            if self.rodando: self.erro_serial.emit(f"Erro Serial: {e}")
-        finally:
-            self.parar()
+            try:
+                # Abre a conexão
+                self.serial_conn = serial.Serial(self.porta, self.baudrate, timeout=0.1)
+                
+                # --- ADICIONE ESTA LINHA AQUI (LIMPEZA DE DADOS ANTIGOS) ---
+                self.serial_conn.reset_input_buffer() 
+                
+                self.rodando = True
+                self.conexao_status.emit(True)
+                
+                while self.rodando:
+                    if self.serial_conn and self.serial_conn.is_open:
+                        if self.serial_conn.in_waiting > 0:
+                            # Usamos 'replace' em vez de 'ignore' para ver se há caracteres corrompidos
+                            linha = self.serial_conn.readline().decode('utf-8', errors='replace').strip()
+                            if linha: 
+                                self.dados_recebidos.emit(linha)
+                    self.msleep(5) # Reduzi para 5ms para maior fluidez no simulador
+            except Exception as e:
+                if self.rodando: self.erro_serial.emit(f"Erro Serial: {e}")
+            finally:
+                self.parar()
 
     def enviar(self, texto: str):
         if self.serial_conn and self.serial_conn.is_open:
