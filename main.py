@@ -15,7 +15,7 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebChannel import QWebChannel
 
 # Suas importações internas
-from EDITOR.compilador import compiladorWandi
+from COMPILADOR.compilador import compiladorWandi
 from CORE.BIBLIOTECA.wandilib import WandiLibManager
 from CORE.MENU.wandimenu import WandiMenu
 from CORE.MOTOR.engine import initialize_wandi_engine
