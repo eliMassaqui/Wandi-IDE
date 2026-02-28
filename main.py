@@ -25,6 +25,8 @@ from CORE.NOTES.notificacoes import WandiToast
 from CORE.HARDWARE.hardware import obter_portas_disponiveis, ArduinoCLI, MonitorSerial
 from CORE.BRIDGE.wandi_bridge import WandiBridge
 
+from hero import WandiHeroSide
+
 class ConsoleStream(QObject):
     """Desvia o print (stdout) para emitir sinais capturáveis pela GUI."""
     text_written = pyqtSignal(str)
@@ -368,13 +370,13 @@ class WandiIDE(QMainWindow):
         self.btn_3d = QPushButton()
         self.btn_3d.setIcon(QIcon(os.path.join(icons_path, "3d.png")))
         self.btn_3d.setIconSize(QSize(39, 39)); self.btn_3d.setFixedSize(43, 43)
-        self.btn_3d.clicked.connect(lambda: self._switch_view(0, "Simulação 3D"))
+        self.btn_3d.clicked.connect(lambda: self._switch_view(1, "Simulação 3D"))
         toolbar.addWidget(self.btn_3d)
         
         self.btn_lib = QPushButton()
         self.btn_lib.setIcon(QIcon(os.path.join(icons_path, "biblioteca.png")))
         self.btn_lib.setIconSize(QSize(39, 39)); self.btn_lib.setFixedSize(43, 43)
-        self.btn_lib.clicked.connect(lambda: self._switch_view(1, "Biblioteca"))
+        self.btn_lib.clicked.connect(lambda: self._switch_view(2, "Biblioteca"))
         toolbar.addWidget(self.btn_lib)
         
         toolbar.addSeparator()
@@ -471,33 +473,53 @@ class WandiIDE(QMainWindow):
         elif index == 1: self.serial_widget.clear()
 
     def _create_project_dock(self):
-        self.project_dock = QDockWidget("Simulação 3D", self)
-        self.project_stack = QStackedWidget()
-        
-        self.simulation_view = QWebEngineView()
-        
-        # --------------------------------------------
+            self.project_dock = QDockWidget("Sistemas Wandi Studio", self) # Nome inicial neutro
+            self.project_dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable | 
+                                        QDockWidget.DockWidgetFeature.DockWidgetClosable)
+            
+            self.project_stack = QStackedWidget()
 
-        self.simulation_view.load(QUrl("https://simulation-one.vercel.app/"))
-        self.library_manager = WandiLibManager()
-        
-        self.project_stack.addWidget(self.simulation_view)
-        self.project_stack.addWidget(self.library_manager)
-        
-        self.project_dock.setWidget(self.project_stack)
-        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.project_dock)
-        self.project_dock.hide()
+            # --- 1. CRIAR A TELA HERO (NOVA) ---
+            self.hero_side = WandiHeroSide()
+            # Quando clicar no ícone, troca para a simulação 3D (Index 1)
+            self.hero_side.start_requested.connect(lambda: self._switch_view(1, "Simulação 3D"))
+
+            # --- 2. CRIAR A VIEW 3D ---
+            self.simulation_view = QWebEngineView()
+            self.simulation_view.load(QUrl("https://simulation-one.vercel.app/"))
+            
+            # --- 3. CRIAR A BIBLIOTECA ---
+            self.library_manager = WandiLibManager()
+            
+            # --- ADICIONAR AO STACK ---
+            self.project_stack.addWidget(self.hero_side)       # INDEX 0 (Início)
+            self.project_stack.addWidget(self.simulation_view) # INDEX 1 (3D)
+            self.project_stack.addWidget(self.library_manager) # INDEX 2 (Lib)
+            
+            self.project_dock.setWidget(self.project_stack)
+            self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.project_dock)
+            
+            # Inicia obrigatoriamente no Hero
+            self.project_stack.setCurrentIndex(0)
 
     def _switch_view(self, index, title):
-        self.project_stack.setCurrentIndex(index)
-        self.project_dock.setWindowTitle(title)
-        self.project_dock.show()
-        largura = 800 if index == 0 else 350
-        self.resizeDocks([self.project_dock], [largura], Qt.Orientation.Horizontal)
+            """Alterna entre Hero, 3D e Biblioteca com larguras dinâmicas."""
+            self.project_stack.setCurrentIndex(index)
+            self.project_dock.setWindowTitle(title)
+            self.project_dock.show()
+            
+            # Se for Hero (0) ou Simulação 3D (1), usa 800px. 
+            # Se for Biblioteca (2), usa 350px.
+            largura = 800 if index in (0, 1) else 350
+            
+            self.resizeDocks([self.project_dock], [largura], Qt.Orientation.Horizontal)
 
     def _adjust_initial_layout(self):
-        self.resizeDocks([self.console_dock], [220], Qt.Orientation.Vertical)
-        self.resizeDocks([self.project_dock], [500], Qt.Orientation.Horizontal)
+            """Define o layout inicial ao abrir a IDE."""
+            # Garante que o Hero (Index 0) comece com 800px
+            self.resizeDocks([self.project_dock], [800], Qt.Orientation.Horizontal)
+            # Define a altura do Console/Mensageiro
+            self.resizeDocks([self.console_dock], [200], Qt.Orientation.Vertical)
 
     def _apply_custom_styles(self):
         self.project_dock.setStyleSheet("""
@@ -541,6 +563,14 @@ if __name__ == "__main__":
 
     # 2. Garante que o Qt tente usar OpenGL para o WebEngine
     os.environ["QT_D3D_CHECK_DEVICE_COMPATIBILITY"] = "0"
+
+    # Flags para performance máxima em 3D
+    os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = (
+        "--enable-gpu-rasterization "
+        "--enable-zero-copy "
+        "--ignore-gpu-blocklist "
+        "--num-raster-threads=4"
+    )
     
     app = QApplication(sys.argv)
     
