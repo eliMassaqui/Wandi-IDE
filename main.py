@@ -567,6 +567,7 @@ if __name__ == "__main__":
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Flags para performance máxima em 3D
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = (
         "--enable-gpu-rasterization "
@@ -575,6 +576,8 @@ if __name__ == "__main__":
         "--num-raster-threads=4"
     )
     
+=======
+>>>>>>> parent of aab14c7 (WANDI COMPLETA COM SUCESSO - VERSAO COMPLETA 3D 20 POR CENTO COMPLETA E PREPARADA PRA EVOLUCAO ISOLADA - PARTE HARDWARE COMPLETA COM SUCESSO 80 POR CENTO.)
 =======
 >>>>>>> parent of aab14c7 (WANDI COMPLETA COM SUCESSO - VERSAO COMPLETA 3D 20 POR CENTO COMPLETA E PREPARADA PRA EVOLUCAO ISOLADA - PARTE HARDWARE COMPLETA COM SUCESSO 80 POR CENTO.)
 =======
