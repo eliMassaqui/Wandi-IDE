@@ -1,0 +1,19 @@
+# --- Python Cache ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# --- Ambientes Virtuais ---
+venv/
+.venv/
+env/
+
+# --- IDEs ---
+.vscode/
+.idea/
+
+# --- Específicos do seu projeto (opcional) ---
+# Se não quiser subir os logs ou backups automáticos da Engine:
+last_session.txt
