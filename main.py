@@ -292,45 +292,36 @@ class WandiIDE(QMainWindow):
         self.arduino_cli.compilar(self.wiring_folder, callback_verificador)
 
     def alternar_conexao_serial(self):
-            if self.thread_serial and self.thread_serial.isRunning():
-                # 1. Desconecta os sinais para evitar que a thread fale com a UI enquanto morre
-                try:
-                    self.thread_serial.dados_recebidos.disconnect()
-                except:
-                    pass
-                
-                # 2. Para a thread e espera um pouco (evita o erro de wait on itself)
-                self.thread_serial.parar()
-                self.thread_serial.wait(300) # Dá 300ms para fechar a porta com calma
-                self.thread_serial = None
-                
-                # 3. Notifica a Web
-                self.web_bridge.send_to_web("STATUS:OFF")
-                self._atualizar_ui_serial_desconectado()
-                self.simulation_view.reload() 
-                
-            else:
-                porta = self.port.currentText()
-                if porta == "Nenhuma porta" or not porta: 
-                    return
-                    
-                # Cria a nova thread
-                self.thread_serial = MonitorSerial(porta)
-                
-                # Conecta os sinais ANTES de iniciar a thread
-                self.thread_serial.dados_recebidos.connect(self.web_bridge.send_to_web)
-                
-                # ---> ESTA É A LINHA QUE FALTAVA PARA EXIBIR NA IDE <---
-                self.thread_serial.dados_recebidos.connect(self.serial_widget.append)
-                
-                self.thread_serial.start()
-                
-                # Sincroniza a Web
-                self.simulation_view.reload() 
-                
-                # Pequeno delay para garantir que o servidor WebSocket está pronto para a nova conexão
-                self.web_bridge.send_to_web("STATUS:ON")
-                self._atualizar_ui_serial_conectado()
+        if self.thread_serial and self.thread_serial.isRunning():
+            # Desconexão segura
+            self.thread_serial.parar()
+            self.thread_serial.wait(300)
+            self.thread_serial = None
+            
+            # Sincroniza Web e UI
+            self.web_bridge.send_to_web("STATUS:OFF")
+            self._atualizar_ui_serial_desconectado()
+        else:
+            porta = self.port.currentText()
+            if porta == "Nenhuma porta" or not porta: 
+                return
+            
+            # Criação da Thread
+            self.thread_serial = MonitorSerial(porta)
+            
+            # --- CONEXÕES DE SINAIS ---
+            # 1. Envia para a Ponte Web (WebSocket)
+            self.thread_serial.dados_recebidos.connect(self.web_bridge.send_to_web)
+            # 2. Exibe no Console da IDE
+            self.thread_serial.dados_recebidos.connect(self.serial_widget.append)
+            # 3. Tratamento de erros
+            self.thread_serial.erro_serial.connect(self.log_to_output)
+            
+            self.thread_serial.start()
+            
+            # Atualiza Status
+            self.web_bridge.send_to_web("STATUS:ON")
+            self._atualizar_ui_serial_conectado()
 
     def enviar_comando_serial(self):
         texto = self.serial_input.text().strip()

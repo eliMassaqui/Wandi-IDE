@@ -63,6 +63,7 @@ class ArduinoCLI:
         cmd = [self.cli_path, "upload", "-p", porta, "--fqbn", self.fqbn, sketch_path]
         self._executar_comando(cmd, f"Enviando para {porta}...", "Upload concluído!", "ERRO NO UPLOAD", callback_log)
 
+
 class MonitorSerial(QThread):
     dados_recebidos = pyqtSignal(str)
     erro_serial = pyqtSignal(str)
@@ -77,7 +78,7 @@ class MonitorSerial(QThread):
 
     def run(self):
         try:
-            # Timeout curto para a thread responder rápido ao comando de parar
+            # Timeout curto para manter a thread responsiva
             self.serial_conn = serial.Serial(self.porta, self.baudrate, timeout=0.1)
             self.rodando = True
             self.conexao_status.emit(True)
@@ -85,19 +86,24 @@ class MonitorSerial(QThread):
             while self.rodando:
                 if self.serial_conn and self.serial_conn.is_open:
                     if self.serial_conn.in_waiting > 0:
+                        # Lê a linha, decodifica e limpa espaços/quebras
                         linha = self.serial_conn.readline().decode('utf-8', errors='ignore').strip()
-                        if linha: self.dados_recebidos.emit(linha)
+                        if linha: 
+                            self.dados_recebidos.emit(linha)
                 self.msleep(10)
         except Exception as e:
-            if self.rodando: self.erro_serial.emit(f"Erro Serial: {e}")
+            if self.rodando: 
+                self.erro_serial.emit(f"Erro Serial: {e}")
         finally:
             self.parar()
 
     def enviar(self, texto: str):
+        """Envia texto para o Arduino com quebra de linha."""
         if self.serial_conn and self.serial_conn.is_open:
             try:
                 self.serial_conn.write(f"{texto}\n".encode('utf-8'))
-                self.dados_recebidos.emit(f"> {texto}") 
+                # Opcional: ecoar na própria IDE o que foi enviado
+                # self.dados_recebidos.emit(f"> {texto}") 
             except Exception as e:
                 self.erro_serial.emit(f"Erro envio: {e}")
 
@@ -106,8 +112,8 @@ class MonitorSerial(QThread):
         self.wait(200)
         if self.serial_conn and self.serial_conn.is_open:
             try:
-                self.serial_conn.reset_input_buffer()
                 self.serial_conn.close()
-            except: pass
+            except: 
+                pass
         self.serial_conn = None
         self.conexao_status.emit(False)

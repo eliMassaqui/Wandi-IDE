@@ -6,14 +6,10 @@ from PyQt6.QtCore import QObject
 class WandiBridge(QObject):
     def __init__(self, main_window):
         super().__init__()
-
-        # send_to_web
-        self.buffer = ""
-        
         self.main_window = main_window
         self.clients = set()
         self.loop = None
-        # Servidor em thread separada
+        # Servidor rodando em background para não bloquear a UI do PyQt
         threading.Thread(target=self._start_server_thread, daemon=True).start()
 
     def _start_server_thread(self):
@@ -22,55 +18,50 @@ class WandiBridge(QObject):
         self.loop.run_until_complete(self._run_server())
 
     async def _run_server(self):
-            try:
-                async with websockets.serve(self._handler, "127.0.0.1", 8765):
-                    await asyncio.Future() 
-            except OSError as e:
-                if e.errno == 10048:
-                    # Uma mensagem positiva, indicando que o serviço já está garantido
-                    print("✨ Wandi Bridge: O servidor já está ativo e a comunicação com o simulador está garantida!")
-                else:
-                    # Mantemos um log discreto para outros erros raros
-                    print(f"ℹ️ Nota de sistema: O servidor passou por um ajuste automático ({e})")
+        try:
+            # Escuta na porta 8765 localmente
+            async with websockets.serve(self._handler, "127.0.0.1", 8765):
+                await asyncio.Future() 
+        except OSError as e:
+            if e.errno == 10048:
+                print("✨ Wandi Bridge: O servidor já está ativo e a comunicação com o simulador está garantida!")
+            else:
+                print(f"ℹ️ Erro Wandi Bridge: {e}")
 
     async def _handler(self, websocket):
         self.clients.add(websocket)
         try:
-            # Ao conectar, informa imediatamente se o hardware já está ativo
-            is_active = self.main_window.thread_serial is not None and self.main_window.thread_serial.isRunning()
+            # Envia o status atual do hardware assim que o simulador conecta
+            is_active = (self.main_window.thread_serial is not None and 
+                         self.main_window.thread_serial.isRunning())
             await websocket.send(f"STATUS:{'ON' if is_active else 'OFF'}")
             
             async for message in websocket:
-                # Web -> Hardware
+                # Comandos vindos da Web -> Repassa para o Hardware
                 if self.main_window.thread_serial and self.main_window.thread_serial.isRunning():
                     self.main_window.thread_serial.enviar(message)
-        except: pass
+        except Exception:
+            pass
         finally:
             self.clients.remove(websocket)
 
-
-
     def send_to_web(self, message):
-            if not self.loop or not self.loop.is_running(): 
-                return
-                
-            # 1. Acumula o que chega do hardware no buffer
-            self.buffer += str(message)
+        """Método chamado pelo sinal da Serial para disparar dados para a Web."""
+        if not self.loop or not self.loop.is_running(): 
+            return
             
-            # 2. Verifica se a mensagem está completa (presença de \n do println)
-            if "\n" in self.buffer:
-                # Extrai a linha completa e limpa o buffer para a próxima
-                msg_final = self.buffer.strip()
-                self.buffer = ""
-                
-                # 3. Dispara o envio para todos os clientes (Simulador e Monitor Live)
-                async def broadcast():
-                    for ws in list(self.clients):
-                        try:
-                            await ws.send(msg_final)
-                        except:
-                            pass
+        msg_final = str(message).strip()
+        if not msg_final:
+            return
 
-                self.loop.call_soon_threadsafe(
-                    lambda: asyncio.create_task(broadcast())
-                )
+        async def broadcast():
+            for ws in list(self.clients):
+                try:
+                    await ws.send(msg_final)
+                except Exception:
+                    pass
+
+        # Usa threadsafe para agendar a tarefa no loop do asyncio a partir da thread do PyQt
+        self.loop.call_soon_threadsafe(
+            lambda: asyncio.create_task(broadcast())
+        )
