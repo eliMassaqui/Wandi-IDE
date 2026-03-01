@@ -556,26 +556,25 @@ def load_style(app):
         print(f"Erro ao carregar estilo: {e}")
 
 if __name__ == "__main__":
-    # 1. Configuração de compatibilidade (Equilíbrio entre estabilidade e 3D)
-    # Removemos --disable-gpu para permitir que o Three.js funcione
-    os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--ignore-gpu-blocklist --enable-gpu-rasterization --log-level=3"
-
-    # 2. Garante que o Qt tente usar OpenGL para o WebEngine
-    os.environ["QT_D3D_CHECK_DEVICE_COMPATIBILITY"] = "0"
-
-    # Flags para performance máxima em 3D
+    # 1. Configuração de Variáveis de Ambiente (Unificadas)
+    # --log-level=3: Silencia erros de sistema/drivers (como o QueryInterface)
+    # --disable-direct-composition: Resolve o erro 0x80004002 sem desativar o 3D
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = (
+        "--ignore-gpu-blocklist "
         "--enable-gpu-rasterization "
         "--enable-zero-copy "
-        "--ignore-gpu-blocklist "
-        "--num-raster-threads=4"
+        "--num-raster-threads=4 "
+        "--log-level=3 "
+        "--disable-direct-composition"
     )
+
+    # 2. Garante compatibilidade de hardware e evita verificações lentas do D3D
+    os.environ["QT_D3D_CHECK_DEVICE_COMPATIBILITY"] = "0"
     
+    # 3. Força o Qt a usar o motor de renderização disponível sem poluir o console
+    os.environ["QT_LOGGING_RULES"] = "qt.webenginecontext.debug=false"
+
     app = QApplication(sys.argv)
-    
-    # IMPORTANTE: Se o erro de "Context could not be created" persistir após 
-    # remover o --disable-gpu, descomente a linha abaixo para usar renderização via software segura:
-    # app.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL)
 
     window = WandiIDE()
     app.setFont(QFont("Consolas", 14))
