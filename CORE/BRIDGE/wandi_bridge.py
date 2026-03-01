@@ -49,23 +49,23 @@ class WandiBridge(QObject):
             self.clients.remove(websocket)
 
     def send_to_web(self, message):
-        if not self.loop or not self.loop.is_running():
+        # Saída rápida se não houver clientes ou loop
+        if not self.clients or not self.loop or not self.loop.is_running():
             return
         
         msg_str = str(message).strip()
         if not msg_str:
             return
 
-        async def broadcast():
-            if not self.clients:
-                return
-            
-            # list(self.clients) evita erro de mutação durante o loop
-            for ws in list(self.clients):
-                try:
-                    await ws.send(msg_str)
-                except Exception:
-                    self.clients.discard(ws)
+        # Agenda o broadcast sem esperar por ele (Non-blocking)
+        self.loop.call_soon_threadsafe(
+            lambda: asyncio.create_task(self._broadcast_fast(msg_str))
+        )
 
-        # FORMA CORRETA: Agenda a corrotina de forma segura entre threads
-        asyncio.run_coroutine_threadsafe(broadcast(), self.loop)
+    async def _broadcast_fast(self, msg_str):
+        if self.clients:
+            # Envio simultâneo para todos os clientes conectados
+            await asyncio.gather(
+                *[ws.send(msg_str) for ws in self.clients], 
+                return_exceptions=True
+            )

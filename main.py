@@ -308,12 +308,15 @@ class WandiIDE(QMainWindow):
             # --- LIMPEZA VISUAL NA IDE ---
             self.serial_widget.clear() 
                 
+            # ... lógica de verificação ...
             self.thread_serial = MonitorSerial(porta)
             
-            # Importante: No seu CORE.HARDWARE.hardware, certifique-se que 
-            # o método run() chama self.serial_conn.reset_input_buffer()
-            
+            # CONEXÃO DE ALTA VELOCIDADE:
+            # 1. Envia para a UI (Thread da GUI - Prioridade 2)
             self.thread_serial.dados_recebidos.connect(self._log_serial_local)
+            
+            # 2. Envia para o Simulador 3D (Thread do Socket - Prioridade 1)
+            # O Qt gerencia essa conexão entre threads de forma segura
             self.thread_serial.dados_recebidos.connect(self.web_bridge.send_to_web)
             
             self.thread_serial.start()
@@ -472,33 +475,38 @@ class WandiIDE(QMainWindow):
         elif index == 1: self.serial_widget.clear()
 
     def _create_project_dock(self):
-            self.project_dock = QDockWidget("Sistemas Wandi Studio", self) # Nome inicial neutro
+            self.project_dock = QDockWidget("Sistemas Wandi Studio", self)
             self.project_dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable | 
                                         QDockWidget.DockWidgetFeature.DockWidgetClosable)
             
             self.project_stack = QStackedWidget()
 
-            # --- 1. CRIAR A TELA HERO (NOVA) ---
+            # --- 1. CRIAR A TELA HERO ---
             self.hero_side = WandiHeroSide()
-            # Quando clicar no ícone, troca para a simulação 3D (Index 1)
             self.hero_side.start_requested.connect(lambda: self._switch_view(1, "Simulação 3D"))
 
-            # --- 2. CRIAR A VIEW 3D ---
-            self.simulation_view = QWebEngineView()
+            # --- 2. CRIAR A VIEW 3D (Corrigido) ---
+            self.simulation_view = QWebEngineView() # Primeiro criamos a instância
+            
+            # Agora configuramos (Performance Máxima)
+            self.simulation_view.page().setBackgroundColor(Qt.GlobalColor.black)
+            self.simulation_view.settings().setAttribute(
+                self.simulation_view.settings().WebAttribute.ShowScrollBars, False
+            )
+            
             self.simulation_view.load(QUrl("https://simulation-one.vercel.app/"))
             
             # --- 3. CRIAR A BIBLIOTECA ---
             self.library_manager = WandiLibManager()
             
             # --- ADICIONAR AO STACK ---
-            self.project_stack.addWidget(self.hero_side)       # INDEX 0 (Início)
-            self.project_stack.addWidget(self.simulation_view) # INDEX 1 (3D)
-            self.project_stack.addWidget(self.library_manager) # INDEX 2 (Lib)
+            self.project_stack.addWidget(self.hero_side)       # INDEX 0
+            self.project_stack.addWidget(self.simulation_view) # INDEX 1
+            self.project_stack.addWidget(self.library_manager) # INDEX 2
             
             self.project_dock.setWidget(self.project_stack)
             self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.project_dock)
             
-            # Inicia obrigatoriamente no Hero
             self.project_stack.setCurrentIndex(0)
 
     def _switch_view(self, index, title):
