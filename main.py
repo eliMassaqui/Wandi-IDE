@@ -25,6 +25,7 @@ from CORE.NOTES.notificacoes import WandiToast
 from CORE.HARDWARE.hardware import obter_portas_disponiveis, ArduinoCLI, MonitorSerial
 from CORE.BRIDGE.wandi_bridge import WandiBridge
 from CORE.HERO.hero import WandiHeroSide
+from CORE.VIRTUAL.Tridimensional import Wandi3DServer, Wandi3DWidget
 
 class ConsoleStream(QObject):
     # Desvia o print (stdout) para emitir sinais capturáveis pela GUI.
@@ -43,6 +44,10 @@ class WandiIDE(QMainWindow):
     signal_log = pyqtSignal(str)
     def __init__(self):
         super().__init__()
+        
+        # INICIALIZAÇÃO DO SERVIDOR 3D
+        self.server_3d = Wandi3DServer()
+        self.server_3d.start()
 
         # Inicializa o servidor WebSocket
         self.web_bridge = WandiBridge(self)
@@ -492,7 +497,7 @@ class WandiIDE(QMainWindow):
                 self.simulation_view.settings().WebAttribute.ShowScrollBars, False
             )
             
-            self.simulation_view.load(QUrl("http://localhost:5173/"))
+            self.simulation_view = Wandi3DWidget()
             
             # 3. CRIAR A BIBLIOTECA
             self.library_manager = WandiLibManager()

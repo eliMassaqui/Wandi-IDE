@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wandi Simulation Studio</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgb(218, 218, 218);
+      --accent: #696969;
+      --text: #0034CF;
+      --green-led: #2ed573;
+    }
+
+    body { margin: 0; overflow: hidden; font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; }
+    canvas { position: fixed; top: 0; left: 0; z-index: 1; }
+
+    #serial-panel {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      width: 350px; max-width: 90vw; height: 130px;
+      background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border); border-radius: 15px;
+      z-index: 100; display: flex; flex-direction: column; padding: 12px; color: var(--text);
+    }
+
+    .panel-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 5px; margin-bottom: 8px; }
+    .status-badge { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: bold; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #ff4757; transition: 0.4s; }
+    .dot.connected { background: var(--green-led); box-shadow: 0 0 10px var(--green-led); animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    #serial-log { flex: 1; font-family: 'Consolas', monospace; font-size: 11px; overflow-y: auto; color: rgba(0,0,255,0.7); scrollbar-width: none; }
+  </style>
+
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" crossorigin src="/assets/index-D8VISpLI.js"></script>
+</head>
+<body>
+  <div id="serial-panel">
+    <div class="panel-header">
+      <span style="font-size: 11px; opacity: 0.6;">WANDI TERMINAL</span>
+      <div class="status-badge">
+        <div id="status-dot" class="dot"></div>
+        <span id="status-text">OFFLINE</span>
+      </div>
+    </div>
+    <div id="serial-log">Aguardando ponte WebSocket...</div>
+  </div>
+</body>
+</html>
