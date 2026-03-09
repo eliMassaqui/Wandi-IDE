@@ -23,16 +23,13 @@ class WandiMenu:
         menubar = self.parent.menuBar()
         menubar.clear() 
 
-        self.wandi_menu = menubar.addMenu("Wandi")
-        self.gerenciador_exemplos = WandiExemplos(self.wandi_menu, self.parent)
-
         # --- FICHEIRO ---
         self.file_menu = menubar.addMenu("Ficheiro")
         self._add_action(self.file_menu, "Novo", self._novo_arquivo).setShortcut(QKeySequence("Ctrl+N"))
         self._add_action(self.file_menu, "Abrir", self._abrir_arquivo).setShortcut(QKeySequence("Ctrl+O"))
         self.file_menu.addSeparator()
         self._add_action(self.file_menu, "Guardar", self._guardar_arquivo).setShortcut(QKeySequence("Ctrl+S"))
-        self._add_action(self.file_menu, "Guardar Como", self._guardar_como).setShortcut(QKeySequence("Ctrl+Shift+S"))
+        self._add_action(self.file_menu, "Guardar Como", self._guardar_como).setShortcut(QKeySequence("Ctrl+W"))
         self.file_menu.addSeparator()
         self._add_action(self.file_menu, "Sair", self.parent.close)
 
@@ -46,26 +43,28 @@ class WandiMenu:
         self._add_action(self.edit_menu, "Cortar", self._cut_action).setShortcut(QKeySequence(QKeySequence.StandardKey.Cut))
         self._add_action(self.edit_menu, "Selecionar tudo", self._select_all_action).setShortcut(QKeySequence(QKeySequence.StandardKey.SelectAll))
 
-        # --- WANDI (RESTAURADO COMPLETO) ---
+        # --- WANDI ---
+        self.wandi_menu = menubar.addMenu("Wandi")
+        self.gerenciador_exemplos = WandiExemplos(self.wandi_menu, self.parent)
+
+        # --- Ferramentas ---
         self.wandi_menu = menubar.addMenu("Ferramentas")
-        self._add_action(self.wandi_menu, "Mensageiro", lambda: self.parent.console_dock.show())
+        self._add_action(self.wandi_menu, "Monitor", lambda: self.parent.console_dock.show()).setShortcut(QKeySequence("F1"))
         self.wandi_menu.addSeparator()
-        self._add_action(self.wandi_menu, "Compilar", self.parent.disparar_compilacao).setShortcut(QKeySequence("F5"))
-        self._add_action(self.wandi_menu, "Enviar", self._placeholder_enviar)
+        self._add_action(self.wandi_menu, "Compilar", self.parent.disparar_compilacao).setShortcut(QKeySequence("F3"))
+        self._add_action(self.wandi_menu, "Enviar", self.parent.disparar_upload).setShortcut(QKeySequence("F5"))
         self.wandi_menu.addSeparator()
-        self._add_action(self.wandi_menu, "3D", lambda: self.parent._switch_view(0, "Simulação 3D"))
-        self._add_action(self.wandi_menu, "Biblioteca", lambda: self.parent._switch_view(1, "Biblioteca"))
-        self._add_action(self.wandi_menu, "Wandi Vision", self._placeholder_enviar)
+        self._add_action(self.wandi_menu, "Visualização 3D", lambda: self.parent._switch_view(1, "Simulação 3D")).setShortcut(QKeySequence("F8"))
+        self._add_action(self.wandi_menu, "Biblioteca", lambda: self.parent._switch_view(2, "Biblioteca")).setShortcut(QKeySequence("F9"))
 
         # --- MAIS ---
-        self.mais_menu = menubar.addMenu("Mais")
-        self._add_action(self.mais_menu, "Wandi Robot", self._sobre_wandi)
+        self.mais_menu = menubar.addMenu("Ajuda")
+        self._add_action(self.mais_menu, "Wandi Robot", self._sobre_wandi).setShortcut(QKeySequence("Ctrl+R"))
         self.mais_menu.addSeparator()
-        self._add_action(self.mais_menu, "Sobre Wandi IDE", self._sobre_wandi)
-        self._add_action(self.mais_menu, "Website Causa-Efeito", self._sobre_wandi)
+        self._add_action(self.mais_menu, "Sobre Wandi IDE", self._sobre_wandi).setShortcut(QKeySequence("Ctrl+M"))
+        self._add_action(self.mais_menu, "Website Causa-Efeito", self._sobre_wandi).setShortcut(QKeySequence("Ctrl+Q"))
         self.mais_menu.addSeparator()
-        self._add_action(self.mais_menu, "Documentacao", self._sobre_wandi)
-        self._add_action(self.mais_menu, "Manual", self._sobre_wandi)
+        self._add_action(self.mais_menu, "Documentacao", self._sobre_wandi).setShortcut(QKeySequence("Ctrl+L"))
 
     # --- LÓGICA DE ABAS E SALVAMENTO ---
 

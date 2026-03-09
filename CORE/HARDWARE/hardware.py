@@ -15,7 +15,7 @@ class ArduinoCLI:
 
     def _executar_comando(self, cmd: list[str], msg_inicio: str, msg_sucesso: str, msg_erro: str, callback_log):
         def tarefa():
-            callback_log(f"\n--- [Wandi Engine] {msg_inicio} ---")
+            callback_log(f"\n[Wandi Engine] {msg_inicio}")
             
             if not os.path.exists(self.cli_path):
                 callback_log(f"❌ ERRO: CLI não encontrado em: {self.cli_path}")

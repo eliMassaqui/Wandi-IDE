@@ -1,2 +1,0 @@
-pip install pyserial websockets python-socketio pyqt6
-pyqt6-webengine pyqtgraph pyinstaller pygame

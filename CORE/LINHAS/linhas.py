@@ -110,7 +110,7 @@ class WandiCodeLinhas(QPlainTextEdit):
                 
                 # Cor azul para linha atual, cinza para as demais
                 is_current = self.textCursor().blockNumber() == block_number
-                painter.setPen(QColor("#007acc") if is_current else QColor("#858585"))
+                painter.setPen(QColor("#007acc") if is_current else QColor("#c1c1c1c1"))
                 
                 # Desenha o texto alinhado à direita com padding de 8px
                 painter.drawText(0, top, self.line_number_area.width() - 8, 

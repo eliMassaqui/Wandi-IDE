@@ -27,7 +27,7 @@ from CORE.BRIDGE.wandi_bridge import WandiBridge
 from CORE.HERO.hero import WandiHeroSide
 
 class ConsoleStream(QObject):
-    """Desvia o print (stdout) para emitir sinais capturáveis pela GUI."""
+    # Desvia o print (stdout) para emitir sinais capturáveis pela GUI.
     text_written = pyqtSignal(str)
     
     def write(self, text):
@@ -44,12 +44,13 @@ class WandiIDE(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.web_bridge = WandiBridge(self) # Inicializa o servidor WebSocket
+        # Inicializa o servidor WebSocket
+        self.web_bridge = WandiBridge(self)
 
         # Conectar o sinal ao método real de escrita
         self.signal_log.connect(self._escrever_no_log)
 
-        # --- CAMINHOS E FERRAMENTAS ---
+        # CAMINHOS E FERRAMENTAS
         self.base_path = os.path.join(os.path.expanduser("~"), "Documents", "Wandi Studio", "Engine")
         self.cli_exe = os.path.join(self.base_path, "arduino", "arduino-cli.exe")
         self.wiring_folder = os.path.join(self.base_path, "WIRING")
@@ -58,7 +59,7 @@ class WandiIDE(QMainWindow):
         self.current_file_path = None 
         self.session_file = os.path.join(self.base_path, "last_session.txt") # Guarda o caminho do último arquivo aberto
 
-        # --- CONFIGURAÇÃO DO AUTO-SAVE (30 SEGUNDOS) ---
+        # CONFIGURAÇÃO DO AUTO-SAVE (30 SEGUNDOS)
         self.timer_autosave = QTimer(self)
         self.timer_autosave.timeout.connect(self._executar_autosave)
         self.timer_autosave.start(30000) # 30000 ms = 30 segundos
@@ -71,14 +72,14 @@ class WandiIDE(QMainWindow):
         self.tradutor = compiladorWandi()
         self.toasts = []
 
-        # --- CONFIGURAÇÃO DA JANELA ---
+        # CONFIGURAÇÃO DA JANELA
         caminho_icone = os.path.join(os.path.dirname(__file__), "icons")
         self.setWindowIcon(QIcon(os.path.join(caminho_icone, "wandi.png")))
-        self.setWindowTitle("Wandi IDE")
+        self.setWindowTitle("Wandi IDE 1.0")
         self.resize(1200, 800)
         self.setCorner(Qt.Corner.BottomRightCorner, Qt.DockWidgetArea.RightDockWidgetArea)
 
-        # --- CONSTRUÇÃO DA UI ---
+        # CONSTRUÇÃO DA UI
         self._create_menu()
         self._create_toolbar(caminho_icone)
         self._create_central()
@@ -88,12 +89,10 @@ class WandiIDE(QMainWindow):
         self._adjust_initial_layout()
         self._apply_custom_styles()
 
-        # --- INICIALIZAÇÃO DO MOTOR ---
+        # INICIALIZAÇÃO DO MOTOR
         QTimer.singleShot(100, self.start_engine_check)
 
-    # ==========================================
     # MOTOR E NOTIFICAÇÕES
-    # ==========================================
     def start_engine_check(self):
         self.stream = ConsoleStream()
         self.stream.text_written.connect(self.gerenciar_notificacao) 
@@ -186,8 +185,6 @@ class WandiIDE(QMainWindow):
                     editor = self.editor_tabs.widget(i)
                     
                     # Precisamos saber o caminho desse arquivo específico.
-                    # Como você pode ter várias abas, o ideal é que cada editor guarde seu próprio caminho.
-                    # Se ainda não implementou isso, usaremos uma verificação de segurança:
                     if hasattr(self, 'current_file_path') and self.current_file_path:
                         # Se for a aba principal/atual
                         if i == self.editor_tabs.currentIndex():
@@ -213,7 +210,7 @@ class WandiIDE(QMainWindow):
                 print(f"Erro no auto-save da aba {index}: {e}")
 
     def marcar_como_modificado(self):
-        """Adiciona um asterisco ao título da aba se o conteúdo for alterado."""
+        # Adiciona um asterisco ao título da aba se o conteúdo for alterado.
         index = self.editor_tabs.currentIndex()
         if index == -1:
             return
@@ -224,9 +221,7 @@ class WandiIDE(QMainWindow):
         if not texto_atual.endswith("*"):
             self.editor_tabs.setTabText(index, texto_atual + "*")
 
-    # ==========================================
     # INTEGRAÇÃO COM HARDWARE
-    # ==========================================
     def atualizar_lista_portas(self):
         porta_atual = self.port.currentText()
         self.port.clear()
@@ -240,7 +235,7 @@ class WandiIDE(QMainWindow):
             self.port.addItem("Nenhuma porta")
 
     def preparar_pasta_wiring(self):
-        """Método auxiliar para traduzir e salvar o arquivo .ino antes do hardware."""
+        # Método auxiliar para traduzir e salvar o arquivo .ino antes do hardware.
         editor = self.editor_tabs.currentWidget()
         if not editor: return False
         
@@ -262,6 +257,7 @@ class WandiIDE(QMainWindow):
             return False
 
     def disparar_compilacao(self):
+        self.console_dock.show()
         # 1. Salva o .py original
         self.menu_manager._guardar_arquivo()
         
@@ -271,6 +267,7 @@ class WandiIDE(QMainWindow):
             self.arduino_cli.compilar(self.wiring_folder, self.log_to_output)
 
     def disparar_upload(self):
+        self.console_dock.show()
         self.menu_manager._guardar_arquivo()
         porta = self.port.currentText()
         
@@ -282,7 +279,7 @@ class WandiIDE(QMainWindow):
         if not self.preparar_pasta_wiring():
             return
 
-        self.log_to_output("--- Iniciando Ciclo: Compilação -> Upload ---")
+        self.log_to_output("Iniciando Ciclo: Compilação -> Upload")
         
         def callback_verificador(mensagem):
             # Este callback vem da thread do subprocesso, mas o sinal resolve o crash
@@ -294,7 +291,7 @@ class WandiIDE(QMainWindow):
 
     def alternar_conexao_serial(self):
         if self.thread_serial and self.thread_serial.isRunning():
-            # ... (seu código de desconexão atual) ...
+            # (seu código de desconexão atual)
             self.thread_serial.parar()
             self.thread_serial.wait(300)
             self.thread_serial = None
@@ -305,10 +302,10 @@ class WandiIDE(QMainWindow):
             if porta == "Nenhuma porta" or not porta: 
                 return
             
-            # --- LIMPEZA VISUAL NA IDE ---
+            # LIMPEZA VISUAL NA IDE
             self.serial_widget.clear() 
                 
-            # ... lógica de verificação ...
+            # lógica de verificação
             self.thread_serial = MonitorSerial(porta)
             
             # CONEXÃO DE ALTA VELOCIDADE:
@@ -347,23 +344,21 @@ class WandiIDE(QMainWindow):
         self.btn_conectar_serial.setText("Conectar")
         self.btn_conectar_serial.setStyleSheet("background-color: #0078d4; border: none; padding: 4px 10px; color: white;")
 
-    # ==========================================
     # CONSTRUÇÃO DA INTERFACE (UI)
-    # ==========================================
     def _create_menu(self):
         self.menu_manager = WandiMenu(self)
 
     def _create_toolbar(self, icons_path):
-        toolbar = QToolBar("Main Toolbar")
+        toolbar = QToolBar("BARRA DE TAREFA")
         toolbar.setMovable(False)
         toolbar.setIconSize(QSize(35, 35)) 
         self.addToolBar(toolbar)
         
-        self.action_compilar = QAction(QIcon(os.path.join(icons_path, "compilar.png")), "Compilar", self)
+        self.action_compilar = QAction(QIcon(os.path.join(icons_path, "compilar.png")), "COMPILAR CÓDIGO", self)
         self.action_compilar.triggered.connect(self.disparar_compilacao)
         toolbar.addAction(self.action_compilar)
         
-        self.action_enviar = QAction(QIcon(os.path.join(icons_path, "enviar.png")), "Enviar", self)
+        self.action_enviar = QAction(QIcon(os.path.join(icons_path, "enviar.png")), "ENVIAR PARA PLACA", self)
         self.action_enviar.triggered.connect(self.disparar_upload)
         toolbar.addAction(self.action_enviar)
         
@@ -372,13 +367,15 @@ class WandiIDE(QMainWindow):
         self.btn_3d = QPushButton()
         self.btn_3d.setIcon(QIcon(os.path.join(icons_path, "3d.png")))
         self.btn_3d.setIconSize(QSize(39, 39)); self.btn_3d.setFixedSize(43, 43)
-        self.btn_3d.clicked.connect(lambda: self._switch_view(1, "Simulação 3D"))
+        self.btn_3d.setToolTip("VISUALIZAÇÃO 3D")
+        self.btn_3d.clicked.connect(lambda: self._switch_view(1, "VISUALIZAÇÃO 3D"))
         toolbar.addWidget(self.btn_3d)
         
         self.btn_lib = QPushButton()
         self.btn_lib.setIcon(QIcon(os.path.join(icons_path, "biblioteca.png")))
         self.btn_lib.setIconSize(QSize(39, 39)); self.btn_lib.setFixedSize(43, 43)
-        self.btn_lib.clicked.connect(lambda: self._switch_view(2, "Biblioteca"))
+        self.btn_lib.setToolTip("BIBLIOTECA")
+        self.btn_lib.clicked.connect(lambda: self._switch_view(2, "BIBLIOTECA"))
         toolbar.addWidget(self.btn_lib)
         
         toolbar.addSeparator()
@@ -399,7 +396,7 @@ class WandiIDE(QMainWindow):
         self.editor_tabs.tabCloseRequested.connect(self._fechar_aba)
 
         editor = WandiCodeLinhas() 
-        editor.setFont(QFont("Consolas", 12))
+        editor.setFont(QFont("Consolas", 14))
         editor.setPlainText("def setup():\n    pass\n\ndef loop():\n    pass")
 
         editor.textChanged.connect(self.marcar_como_modificado)
@@ -416,7 +413,7 @@ class WandiIDE(QMainWindow):
         self.statusBar().showMessage("Aba removida.")
 
     def _create_console_dock(self):
-        self.console_dock = QDockWidget("Mensageiro", self)
+        self.console_dock = QDockWidget("MONITOR", self)
         self.console_tabs = QTabWidget() 
         
         style_flat = """
@@ -430,7 +427,7 @@ class WandiIDE(QMainWindow):
 
         self.output_widget = QTextEdit()
         self.output_widget.setReadOnly(True)
-        self.console_tabs.addTab(self.output_widget, "Output")
+        self.console_tabs.addTab(self.output_widget, "SAÍDA")
 
         serial_tab = QWidget()
         ser_layout = QVBoxLayout(serial_tab)
@@ -442,11 +439,11 @@ class WandiIDE(QMainWindow):
         self.btn_conectar_serial.clicked.connect(self.alternar_conexao_serial)
         
         self.serial_input = QLineEdit()
-        self.serial_input.setPlaceholderText("Enviar comando...")
+        self.serial_input.setPlaceholderText("Escreva algum comando...")
         self.serial_input.returnPressed.connect(self.enviar_comando_serial) 
         
         btn_enviar = QPushButton("Enviar")
-        btn_enviar.setStyleSheet("background-color: #333; border: none; padding: 4px 10px;")
+        btn_enviar.setStyleSheet("background-color: #333; border: none; padding: 2px 8px;")
         btn_enviar.clicked.connect(self.enviar_comando_serial)
         
         input_container.addWidget(self.btn_conectar_serial)
@@ -458,7 +455,7 @@ class WandiIDE(QMainWindow):
         
         ser_layout.addLayout(input_container)
         ser_layout.addWidget(self.serial_widget)
-        self.console_tabs.addTab(serial_tab, "Serial")
+        self.console_tabs.addTab(serial_tab, "SERIAL")
 
         btn_limpar_geral = QPushButton("LIMPAR")
         btn_limpar_geral.setObjectName("btnLimpar")
@@ -468,6 +465,7 @@ class WandiIDE(QMainWindow):
 
         self.console_dock.setWidget(self.console_tabs)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.console_dock)
+        self.console_dock.hide()
 
     def _limpar_aba_atual(self):
         index = self.console_tabs.currentIndex()
@@ -475,17 +473,17 @@ class WandiIDE(QMainWindow):
         elif index == 1: self.serial_widget.clear()
 
     def _create_project_dock(self):
-            self.project_dock = QDockWidget("Sistemas Wandi Studio", self)
+            self.project_dock = QDockWidget("VISUALIZAÇÃO 3D", self)
             self.project_dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable | 
                                         QDockWidget.DockWidgetFeature.DockWidgetClosable)
             
             self.project_stack = QStackedWidget()
 
-            # --- 1. CRIAR A TELA HERO ---
+            # 1. CRIAR A TELA HERO
             self.hero_side = WandiHeroSide()
-            self.hero_side.start_requested.connect(lambda: self._switch_view(1, "Simulação 3D"))
+            self.hero_side.start_requested.connect(lambda: self._switch_view(1, "VISUALIZAÇÃO 3D"))
 
-            # --- 2. CRIAR A VIEW 3D (Corrigido) ---
+            # 2. CRIAR A VIEW 3D (Corrigido)
             self.simulation_view = QWebEngineView() # Primeiro criamos a instância
             
             # Agora configuramos (Performance Máxima)
@@ -494,12 +492,12 @@ class WandiIDE(QMainWindow):
                 self.simulation_view.settings().WebAttribute.ShowScrollBars, False
             )
             
-            self.simulation_view.load(QUrl("https://simulation-one.vercel.app/"))
+            self.simulation_view.load(QUrl("http://localhost:5173/"))
             
-            # --- 3. CRIAR A BIBLIOTECA ---
+            # 3. CRIAR A BIBLIOTECA
             self.library_manager = WandiLibManager()
             
-            # --- ADICIONAR AO STACK ---
+            # ADICIONAR AO STACK
             self.project_stack.addWidget(self.hero_side)       # INDEX 0
             self.project_stack.addWidget(self.simulation_view) # INDEX 1
             self.project_stack.addWidget(self.library_manager) # INDEX 2
@@ -510,7 +508,7 @@ class WandiIDE(QMainWindow):
             self.project_stack.setCurrentIndex(0)
 
     def _switch_view(self, index, title):
-            """Alterna entre Hero, 3D e Biblioteca com larguras dinâmicas."""
+            # Alterna entre Hero, 3D e Biblioteca com larguras dinâmicas.
             self.project_stack.setCurrentIndex(index)
             self.project_dock.setWindowTitle(title)
             self.project_dock.show()
@@ -522,11 +520,11 @@ class WandiIDE(QMainWindow):
             self.resizeDocks([self.project_dock], [largura], Qt.Orientation.Horizontal)
 
     def _adjust_initial_layout(self):
-            """Define o layout inicial ao abrir a IDE."""
+            # Define o layout inicial ao abrir a IDE.
             # Garante que o Hero (Index 0) comece com 800px
             self.resizeDocks([self.project_dock], [800], Qt.Orientation.Horizontal)
             # Define a altura do Console/Mensageiro
-            self.resizeDocks([self.console_dock], [200], Qt.Orientation.Vertical)
+            self.resizeDocks([self.console_dock], [250], Qt.Orientation.Vertical)
 
     def _apply_custom_styles(self):
         self.project_dock.setStyleSheet("""
@@ -557,8 +555,8 @@ class WandiIDE(QMainWindow):
 
 def load_style(app):
     try:
-        if os.path.exists("style/dark.qss"):
-            with open("style/dark.qss", "r", encoding="utf-8") as f:
+        if os.path.exists("CORE/ESTILO/dark.qss"):
+            with open("CORE/ESTILO/dark.qss", "r", encoding="utf-8") as f:
                 app.setStyleSheet(f.read())
     except Exception as e: 
         print(f"Erro ao carregar estilo: {e}")

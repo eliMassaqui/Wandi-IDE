@@ -348,7 +348,7 @@ class WandiLibManager(QWidget):
         self.process_render_queue()
 
     def process_render_queue(self):
-        lote_size = 20
+        lote_size = 50
         self.card_layout.removeWidget(self.btn_more)
         for _ in range(lote_size):
             if not self.pending_libs: break
