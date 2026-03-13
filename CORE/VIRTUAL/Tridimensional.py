@@ -15,7 +15,7 @@ class WandiHandler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, **kwargs)
 
 class Wandi3DServer:
-    def __init__(self, port=5173, directory="3D"):
+    def __init__(self, port=3800, directory="3D"):
         self.port = port
         self.directory = directory
         self.httpd = None
@@ -53,7 +53,7 @@ class Wandi3DServer:
             self.httpd.shutdown()
 
 class Wandi3DWidget(QWebEngineView):
-    def __init__(self, url=f"http://localhost:5173"):
+    def __init__(self, url=f"http://localhost:3800"):
         super().__init__()
         self.page().setBackgroundColor(Qt.GlobalColor.black)
         
